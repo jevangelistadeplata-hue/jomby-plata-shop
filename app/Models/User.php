@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -22,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -45,5 +47,45 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Un usuario pertenece a un rol.
+     */
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Un usuario puede tener un proveedor.
+     */
+    public function supplier(): HasOne
+    {
+        return $this->hasOne(Supplier::class);
+    }
+
+    /**
+     * Verifica si el usuario es Administrador.
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role?->name === 'Administrador';
+    }
+
+    /**
+     * Verifica si el usuario es Proveedor.
+     */
+    public function isSupplier(): bool
+    {
+        return $this->role?->name === 'Proveedor';
+    }
+
+    /**
+     * Verifica si el usuario es Cliente.
+     */
+    public function isClient(): bool
+    {
+        return $this->role?->name === 'Cliente';
     }
 }
