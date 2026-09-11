@@ -1,0 +1,107 @@
+@extends('layouts.app')
+
+@section('title', 'Iniciar sesión')
+
+@section('content')
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white text-center">
+                    <h4 class="mb-0">Iniciar sesión</h4>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form method="POST" action="{{ route('login.store') }}">
+                        @csrf
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">
+                                Correo electrónico
+                            </label>
+
+                            <input
+                                type="email"
+                                class="form-control @error('email') is-invalid @enderror"
+                                id="email"
+                                name="email"
+                                value="{{ old('email') }}"
+                                autocomplete="username"
+                                required
+                                autofocus
+                            >
+
+                            @error('email')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">
+                                Contraseña
+                            </label>
+
+                            <input
+                                type="password"
+                                class="form-control @error('password') is-invalid @enderror"
+                                id="password"
+                                name="password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                            @error('password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input
+                                type="checkbox"
+                                class="form-check-input"
+                                id="remember"
+                                name="remember"
+                                value="1"
+                                {{ old('remember') ? 'checked' : '' }}
+                            >
+
+                            <label class="form-check-label" for="remember">
+                                Recordarme
+                            </label>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                Iniciar sesión
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="mb-2">
+                            ¿No tienes una cuenta?
+                        </p>
+
+                        <a
+                            href="{{ route('register') }}"
+                            class="btn btn-outline-dark"
+                        >
+                            Registrarse
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+@endsection
