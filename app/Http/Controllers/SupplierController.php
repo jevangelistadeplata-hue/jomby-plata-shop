@@ -8,42 +8,36 @@ use Illuminate\Http\Request;
 class SupplierController extends Controller
 {
     /**
-     * Muestra el listado de proveedores.
+     * Muestra el listado de proveedores para el administrador.
      */
     public function index(Request $request)
     {
-        // Obtiene los valores enviados desde el formulario de búsqueda y filtro.
         $search = $request->input('search');
-
         $status = $request->input('status');
 
-        // Construye la consulta de proveedores junto con el usuario relacionado.
         $query = Supplier::with('user');
 
-        // Aplica la búsqueda por nombre, correo o empresa.
+        // Filtrado por empresa, teléfono o datos del usuario asociado.
         if ($search) {
             $query->where(function ($q) use ($search) {
-
                 $q->where('business_name', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%")
                     ->orWhereHas('user', function ($userQuery) use ($search) {
-
                         $userQuery->where('name', 'like', "%{$search}%")
                             ->orWhere('email', 'like', "%{$search}%");
-
                     });
-
             });
         }
 
-        // Aplica el filtro por estado.
+        // Filtrado por estado de aprobación.
         if ($status) {
             $query->where('status', $status);
         }
 
-        // Obtiene los proveedores más recientes primero.
         $suppliers = $query
             ->latest()
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.suppliers.index', compact(
             'suppliers',
@@ -53,32 +47,30 @@ class SupplierController extends Controller
     }
 
     /**
-     * Aprueba un proveedor.
+     * Aprueba la solicitud de un proveedor.
      */
     public function approve(Supplier $supplier)
     {
-        // Cambia el estado del proveedor a aprobado.
         $supplier->update([
             'status' => 'approved',
         ]);
 
         return redirect()
-            ->route('admin.suppliers.index')
-            ->with('success', 'El proveedor fue aprobado correctamente.');
+            ->back()
+            ->with('success', 'El proveedor ha sido aprobado correctamente.');
     }
 
     /**
-     * Rechaza un proveedor.
+     * Rechaza la solicitud de un proveedor.
      */
     public function reject(Supplier $supplier)
     {
-        // Cambia el estado del proveedor a rechazado.
         $supplier->update([
             'status' => 'rejected',
         ]);
 
         return redirect()
-            ->route('admin.suppliers.index')
-            ->with('success', 'El proveedor fue rechazado correctamente.');
+            ->back()
+            ->with('success', 'El proveedor ha sido rechazado.');
     }
 }

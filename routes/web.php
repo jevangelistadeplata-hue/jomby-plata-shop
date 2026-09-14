@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
@@ -122,3 +123,50 @@ Route::middleware(['auth', 'admin'])
         Route::get('/ventas', [SaleController::class, 'index'])
             ->name('sales.index');
     });
+
+/*
+|--------------------------------------------------------------------------
+| Rutas del proveedor
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role:Proveedor'])
+    ->prefix('proveedor')
+    ->as('proveedor.')
+    ->group(function () {
+
+        // Muestra el dashboard del proveedor.
+        Route::get('/dashboard', [ProveedorController::class, 'dashboard'])
+            ->name('dashboard');
+
+        // Muestra los productos del proveedor.
+        Route::get('/productos', [ProveedorController::class, 'products'])
+            ->name('products.index');
+
+        // Muestra el formulario para registrar un producto.
+        Route::get('/productos/crear', [ProveedorController::class, 'create'])
+            ->name('products.create');
+            
+        // Guarda un nuevo producto.
+        Route::post('/productos', [ProveedorController::class, 'store'])
+            ->name('products.store');  
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Rutas del cliente
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role:Cliente'])
+    ->prefix('cliente')
+    ->as('cliente.')
+    ->group(function () {
+
+        // Muestra el dashboard del cliente.
+        Route::get('/dashboard', function () {
+            return view('cliente.dashboard');
+        })->name('dashboard');
+    });
+
+
