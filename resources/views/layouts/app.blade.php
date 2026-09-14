@@ -179,6 +179,59 @@
 
                         @endif
 
+                        {{-- Opciones exclusivas del cliente --}}
+                        @if (auth()->user()->isClient())
+
+                            {{-- Dashboard del cliente --}}
+                            <li class="nav-item">
+
+                                <a
+                                    class="nav-link {{ request()->routeIs('cliente.dashboard') ? 'active' : '' }}"
+                                    href="{{ route('cliente.dashboard') }}"
+                                >
+                                    Dashboard
+                                </a>
+
+                            </li>
+
+                            {{-- Productos --}}
+                            <li class="nav-item">
+
+                                <a
+                                    class="nav-link {{ request()->routeIs('cliente.catalog') ? 'active' : '' }}"
+                                    href="{{ route('cliente.catalog') }}"
+                                >
+                                    Productos
+                                </a>
+
+                            </li>
+
+                            {{-- Carrito --}}
+                            <li class="nav-item">
+
+                                <a
+                                    class="nav-link {{ request()->routeIs('cliente.cart.index') ? 'active' : '' }}"
+                                    href="{{ route('cliente.cart.index') }}"
+                                >
+                                    Mi carrito
+                                </a>
+
+                            </li>
+
+                            {{-- Compras --}}
+                            <li class="nav-item">
+
+                                <a
+                                    class="nav-link {{ request()->routeIs('cliente.purchases') ? 'active' : '' }}"
+                                    href="{{ route('cliente.purchases') }}" 
+                                >
+                                    Mis compras
+                                </a>
+
+                            </li>
+
+                        @endif
+
                     @endauth
 
                     {{-- Opciones para usuarios no autenticados --}}
@@ -317,5 +370,7 @@
 </body>
 
 </html>
+
+
 
 

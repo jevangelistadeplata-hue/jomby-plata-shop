@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\SaleController;
@@ -146,10 +148,18 @@ Route::middleware(['auth', 'role:Proveedor'])
         // Muestra el formulario para registrar un producto.
         Route::get('/productos/crear', [ProveedorController::class, 'create'])
             ->name('products.create');
-            
+
         // Guarda un nuevo producto.
         Route::post('/productos', [ProveedorController::class, 'store'])
-            ->name('products.store');  
+            ->name('products.store');
+
+        // Muestra el formulario para editar un producto.
+        Route::get('/productos/{product}/editar', [ProveedorController::class, 'edit'])
+            ->name('products.edit');
+
+        // Actualiza un producto existente.
+        Route::put('/productos/{product}', [ProveedorController::class, 'update'])
+            ->name('products.update');
     });
 
 /*
@@ -167,6 +177,40 @@ Route::middleware(['auth', 'role:Cliente'])
         Route::get('/dashboard', function () {
             return view('cliente.dashboard');
         })->name('dashboard');
+
+        // Muestra el catálogo de productos disponibles.
+        Route::get('/productos', [ClienteController::class, 'catalog'])
+            ->name('catalog');
+
+        // Muestra el carrito del cliente.
+        Route::get('/carrito', [CartController::class, 'index'])
+            ->name('cart.index');
+        
+       // Muestra las compras realizadas por el cliente.
+        Route::get('/compras', [ClienteController::class, 'purchases'])
+            ->name('purchases');       
+
+        // Agrega un producto al carrito.
+        Route::post('/carrito/agregar/{product}', [CartController::class, 'add'])
+            ->name('cart.add');
+
+       // Aumenta la cantidad de un producto del carrito.
+        Route::patch('/carrito/aumentar/{product}', [CartController::class, 'increase'])
+            ->name('cart.increase');
+
+       // Disminuye la cantidad de un producto del carrito.
+        Route::patch('/carrito/disminuir/{product}', [CartController::class, 'decrease'])
+            ->name('cart.decrease'); 
+
+         // Elimina un producto del carrito.
+        Route::delete('/carrito/eliminar/{product}', [CartController::class, 'remove'])
+            ->name('cart.remove');
+        
+       // Finaliza la compra del cliente.
+        Route::post('/carrito/finalizar', [CartController::class, 'checkout'])
+            ->name('cart.checkout');     
+            
     });
+
 
 

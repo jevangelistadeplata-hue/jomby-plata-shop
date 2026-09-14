@@ -4,128 +4,183 @@
 
 @section('content')
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 fw-bold mb-1">
-                Mis productos
-            </h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-            <p class="text-muted mb-0">
-                Productos registrados por {{ $supplier->business_name }}.
-            </p>
-        </div>
+    <div>
 
-        <a href="{{ route('proveedor.products.create') }}" class="btn btn-primary">
-            Registrar producto
-        </a>
+        <h1 class="h3 fw-bold mb-1">
+            Mis productos
+        </h1>
+
+        <p class="text-muted mb-0">
+            Productos registrados por {{ $supplier->business_name }}.
+        </p>
+
     </div>
 
-    @if ($products->count())
+    <a
+        href="{{ route('proveedor.products.create') }}"
+        class="btn btn-primary"
+    >
+        Registrar producto
+    </a>
 
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
+</div>
 
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
+@if ($products->count())
 
-                        <thead>
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Producto
+                            </th>
+
+                            <th>
+                                Categoría
+                            </th>
+
+                            <th>
+                                Precio de costo
+                            </th>
+
+                            <th>
+                                Precio de venta
+                            </th>
+
+                            <th>
+                                Stock
+                            </th>
+
+                            <th>
+                                Estado
+                            </th>
+
+                            <th>
+                                Acciones
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach ($products as $product)
+
                             <tr>
-                                <th>Producto</th>
-                                <th>Categoría</th>
-                                <th>Precio de costo</th>
-                                <th>Precio de venta</th>
-                                <th>Stock</th>
-                                <th>Estado</th>
+
+                                <td>
+
+                                    <strong>
+                                        {{ $product->name }}
+                                    </strong>
+
+                                    @if ($product->description)
+
+                                        <br>
+
+                                        <small class="text-muted">
+                                            {{ $product->description }}
+                                        </small>
+
+                                    @endif
+
+                                </td>
+
+                                <td>
+                                    {{ $product->category->name ?? 'Sin categoría' }}
+                                </td>
+
+                                <td>
+                                    RD$ {{ number_format($product->cost_price, 2) }}
+                                </td>
+
+                                <td>
+                                    RD$ {{ number_format($product->sale_price, 2) }}
+                                </td>
+
+                                <td>
+                                    {{ $product->stock }}
+                                </td>
+
+                                <td>
+
+                                    @if ($product->status === 'approved')
+
+                                        <span class="badge bg-success">
+                                            Aprobado
+                                        </span>
+
+                                    @elseif ($product->status === 'pending')
+
+                                        <span class="badge bg-warning text-dark">
+                                            Pendiente
+                                        </span>
+
+                                    @elseif ($product->status === 'inactive')
+
+                                        <span class="badge bg-secondary">
+                                            Inactivo
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        href="{{ route('proveedor.products.edit', $product) }}"
+                                        class="btn btn-sm btn-outline-primary"
+                                    >
+                                        Editar
+                                    </a>
+
+                                </td>
+
                             </tr>
-                        </thead>
 
-                        <tbody>
+                        @endforeach
 
-                            @foreach ($products as $product)
+                    </tbody>
 
-                                <tr>
-                                    <td>
-                                        <strong>
-                                            {{ $product->name }}
-                                        </strong>
-
-                                        @if ($product->description)
-                                            <br>
-
-                                            <small class="text-muted">
-                                                {{ $product->description }}
-                                            </small>
-                                        @endif
-                                    </td>
-
-                                    <td>
-                                        {{ $product->category->name ?? 'Sin categoría' }}
-                                    </td>
-
-                                    <td>
-                                        RD$ {{ number_format($product->cost_price, 2) }}
-                                    </td>
-
-                                    <td>
-                                        RD$ {{ number_format($product->sale_price, 2) }}
-                                    </td>
-
-                                    <td>
-                                        {{ $product->stock }}
-                                    </td>
-
-                                    <td>
-
-                                        @if ($product->status === 'approved')
-
-                                            <span class="badge bg-success">
-                                                Aprobado
-                                            </span>
-
-                                        @elseif ($product->status === 'pending')
-
-                                            <span class="badge bg-warning text-dark">
-                                                Pendiente
-                                            </span>
-
-                                        @elseif ($product->status === 'inactive')
-
-                                            <span class="badge bg-secondary">
-                                                Inactivo
-                                            </span>
-
-                                        @endif
-
-                                    </td>
-                                </tr>
-
-                            @endforeach
-
-                        </tbody>
-
-                    </table>
-                </div>
+                </table>
 
             </div>
+
         </div>
 
-    @else
+    </div>
 
-        <div class="card border-0 shadow-sm">
-            <div class="card-body text-center py-5">
+@else
 
-                <h5 class="fw-bold">
-                    No tienes productos registrados.
-                </h5>
+    <div class="card border-0 shadow-sm">
 
-                <p class="text-muted mb-0">
-                    Cuando registres productos, aparecerán en esta sección.
-                </p>
+        <div class="card-body text-center py-5">
 
-            </div>
+            <h5 class="fw-bold">
+                No tienes productos registrados.
+            </h5>
+
+            <p class="text-muted mb-0">
+                Cuando registres productos, aparecerán en esta sección.
+            </p>
+
         </div>
 
-    @endif
+    </div>
+
+@endif
 
 @endsection
 
