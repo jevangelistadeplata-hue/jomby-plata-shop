@@ -4,24 +4,20 @@
 
 @section('content')
 
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold">
-            Jomby Plata Shop
-        </h1>
+<div class="text-center py-5">
 
-        <p class="lead">
-            Plataforma de comercio y gestión empresarial
-        </p>
-    </div>
+    <h1 class="display-4 fw-bold mb-3">
+        Bienvenido a Jomby Plata Shop
+    </h1>
 
-    <div class="alert alert-info" role="alert">
-        Blade y Bootstrap están funcionando correctamente.
-    </div>
+    <p class="lead text-muted mb-0">
+        Plataforma de comercio y gestión empresarial.
+    </p>
 
-    <div class="text-center">
-        <button type="button" class="btn btn-primary">
-            Botón de prueba
-        </button>
-    </div>
+    <p class="text-muted mt-2">
+        Encuentra productos, gestiona tus compras y administra las operaciones de tu negocio.
+    </p>
+
+</div>
 
 @endsection
