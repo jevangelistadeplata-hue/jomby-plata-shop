@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AccountingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ClientController;
@@ -124,6 +125,10 @@ Route::middleware(['auth', 'admin'])
         // Muestra el listado de ventas.
         Route::get('/ventas', [SaleController::class, 'index'])
             ->name('sales.index');
+        
+        // Muestra el resumen básico de contabilidad.
+        Route::get('/contabilidad', [AccountingController::class, 'index'])
+            ->name('accounting.index');  
     });
 
 /*

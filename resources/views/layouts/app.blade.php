@@ -127,9 +127,8 @@
                             <li class="nav-item">
 
                                 <a
-                                    class="nav-link"
-                                    href="#"
-                                    title="Módulo pendiente de desarrollo"
+                                    class="nav-link {{ request()->routeIs('admin.accounting.index') ? 'active' : '' }}" 
+                                    href="{{ route('admin.accounting.index') }}"                             
                                 >
                                     Contabilidad
                                 </a>

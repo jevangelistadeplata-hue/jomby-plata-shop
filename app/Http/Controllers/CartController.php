@@ -266,11 +266,13 @@ class CartController extends Controller
                     $product = $products[$item['product_id']];
                     $quantity = (int) $item['quantity'];
                     $unitPrice = $product->sale_price;
+                    $costPrice = $product->cost_price;
                     $itemSubtotal = $unitPrice * $quantity;
 
                     $order->items()->create([
                         'product_id' => $product->id,
                         'quantity' => $quantity,
+                        'cost_price' => $costPrice,
                         'unit_price' => $unitPrice,
                         'subtotal' => $itemSubtotal,
                     ]);
