@@ -4,113 +4,111 @@
 
 @section('content')
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-        <div>
+    <div>
 
-            <h1 class="h3 fw-bold mb-1">
-                Detalle de compra
-            </h1>
+        <h1 class="h3 fw-bold mb-1">
+            Detalle de compra
+        </h1>
 
-            <p class="text-muted mb-0">
-                Consulta los productos incluidos en esta compra.
-            </p>
-
-        </div>
-
-        <a
-            href="{{ route('cliente.purchases') }}"
-            class="btn btn-outline-primary"
-        >
-            Volver a mis compras
-        </a>
+        <p class="text-muted mb-0">
+            Consulta los productos incluidos en esta compra.
+        </p>
 
     </div>
 
-    {{-- Información general de la compra. --}}
-    <div class="card border-0 shadow-sm mb-4">
+    <a
+        href="{{ route('cliente.purchases') }}"
+        class="btn btn-outline-primary"
+    >
+        Volver a mis compras
+    </a>
 
-        <div class="card-body">
+</div>
 
-            <div class="row g-4">
+{{-- Información general de la compra. --}}
+<div class="card border-0 shadow-sm mb-4">
 
-                <div class="col-md-4">
+    <div class="card-body">
 
-                    <p class="text-muted mb-1">
-                        Número de venta
-                    </p>
+        <div class="row g-4">
 
-                    <h5 class="fw-bold">
-                        {{ $order->order_number }}
-                    </h5>
+            <div class="col-md-4">
 
-                </div>
+                <p class="text-muted mb-1">
+                    Número de venta
+                </p>
 
-                <div class="col-md-4">
+                <h5 class="fw-bold">
+                    {{ $order->order_number }}
+                </h5>
 
-                    <p class="text-muted mb-1">
-                        Fecha
-                    </p>
+            </div>
 
-                    <h5 class="fw-bold">
-                        {{ $order->created_at->format('d/m/Y H:i') }}
-                    </h5>
+            <div class="col-md-4">
 
-                </div>
+                <p class="text-muted mb-1">
+                    Fecha
+                </p>
 
-                <div class="col-md-4">
+                <h5 class="fw-bold">
+                    {{ $order->created_at->format('d/m/Y H:i') }}
+                </h5>
 
-                    <p class="text-muted mb-1">
-                        Estado
-                    </p>
+            </div>
 
-                    @if ($order->status === 'confirmed')
+            <div class="col-md-4">
 
-                        <span class="badge bg-success">
-                            Confirmada
-                        </span>
+                <p class="text-muted mb-1">
+                    Estado
+                </p>
 
-                    @elseif ($order->status === 'pending')
+                @if ($order->status === 'confirmed')
 
-                        <span class="badge bg-warning text-dark">
-                            Pendiente
-                        </span>
+                    <span class="badge bg-success">
+                        Confirmada
+                    </span>
 
-                    @elseif ($order->status === 'completed')
+                @elseif ($order->status === 'pending')
 
-                        <span class="badge bg-primary">
-                            Completada
-                        </span>
+                    <span class="badge bg-warning text-dark">
+                        Pendiente
+                    </span>
 
-                    @elseif ($order->status === 'cancelled')
+                @elseif ($order->status === 'completed')
 
-                        <span class="badge bg-danger">
-                            Cancelada
-                        </span>
+                    <span class="badge bg-primary">
+                        Completada
+                    </span>
 
+                @elseif ($order->status === 'cancelled')
+
+                    <span class="badge bg-danger">
+                        Cancelada
+                    </span>
+
+                @endif
+
+            </div>
+
+            <div class="col-md-4">
+
+                <p class="text-muted mb-1">
+                    Método de pago
+                </p>
+
+                <h6 class="fw-bold">
+
+                    @if ($order->payment_method === 'cash')
+                        Efectivo
+                    @elseif ($order->payment_method === 'card')
+                        Tarjeta
+                    @elseif ($order->payment_method === 'transfer')
+                        Transferencia
                     @endif
 
-                </div>
-
-                <div class="col-md-4">
-
-                    <p class="text-muted mb-1">
-                        Método de pago
-                    </p>
-
-                    <h6 class="fw-bold">
-
-                        @if ($order->payment_method === 'cash')
-                            Efectivo
-                        @elseif ($order->payment_method === 'card')
-                            Tarjeta
-                        @elseif ($order->payment_method === 'transfer')
-                            Transferencia
-                        @endif
-
-                    </h6>
-
-                </div>
+                </h6>
 
             </div>
 
@@ -118,134 +116,151 @@
 
     </div>
 
-    {{-- Productos incluidos en la compra. --}}
-    <div class="card border-0 shadow-sm">
+</div>
 
-        <div class="card-body">
+{{-- Productos incluidos en la compra. --}}
+<div class="card border-0 shadow-sm">
 
-            <h5 class="fw-bold mb-4">
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <h5 class="fw-bold mb-0">
                 Productos comprados
             </h5>
 
-            <div class="table-responsive">
+            @if ($order->status !== 'cancelled')
 
-                <table class="table table-hover align-middle">
+                <a
+                    href="{{ route('cliente.returns.create', $order) }}"
+                    class="btn btn-outline-warning"
+                >
+                    Solicitar devolución
+                </a>
 
-                    <thead>
+            @endif
 
-                        <tr>
+        </div>
 
-                            <th>
-                                Producto
-                            </th>
+        <div class="table-responsive">
 
-                            <th class="text-center">
-                                Cantidad
-                            </th>
+            <table class="table table-hover align-middle">
 
-                            <th class="text-end">
-                                Precio unitario
-                            </th>
+                <thead>
 
-                            <th class="text-end">
-                                Subtotal
-                            </th>
+                    <tr>
 
-                        </tr>
+                        <th>
+                            Producto
+                        </th>
 
-                    </thead>
+                        <th class="text-center">
+                            Cantidad
+                        </th>
 
-                    <tbody>
+                        <th class="text-end">
+                            Precio unitario
+                        </th>
 
-                        @foreach ($order->items as $item)
+                        <th class="text-end">
+                            Subtotal
+                        </th>
 
-                            <tr>
+                    </tr>
 
-                                <td>
-                                    <strong>
-                                        {{ $item->product->name }}
-                                    </strong>
-                                </td>
+                </thead>
 
-                                <td class="text-center">
-                                    {{ $item->quantity }}
-                                </td>
+                <tbody>
 
-                                <td class="text-end">
-                                    RD$
-                                    {{ number_format($item->unit_price, 2) }}
-                                </td>
-
-                                <td class="text-end fw-bold">
-                                    RD$
-                                    {{ number_format($item->subtotal, 2) }}
-                                </td>
-
-                            </tr>
-
-                        @endforeach
-
-                    </tbody>
-
-                    <tfoot>
+                    @foreach ($order->items as $item)
 
                         <tr>
 
-                            <td
-                                colspan="3"
-                                class="text-end fw-bold"
-                            >
-                                Subtotal:
+                            <td>
+                                <strong>
+                                    {{ $item->product->name }}
+                                </strong>
+                            </td>
+
+                            <td class="text-center">
+                                {{ $item->quantity }}
+                            </td>
+
+                            <td class="text-end">
+                                RD$
+                                {{ number_format($item->unit_price, 2) }}
                             </td>
 
                             <td class="text-end fw-bold">
                                 RD$
-                                {{ number_format($order->subtotal, 2) }}
+                                {{ number_format($item->subtotal, 2) }}
                             </td>
 
                         </tr>
 
-                        <tr>
+                    @endforeach
 
-                            <td
-                                colspan="3"
-                                class="text-end fw-bold"
-                            >
-                                Impuestos:
-                            </td>
+                </tbody>
 
-                            <td class="text-end fw-bold">
-                                RD$
-                                {{ number_format($order->tax, 2) }}
-                            </td>
+                <tfoot>
 
-                        </tr>
+                    <tr>
 
-                        <tr>
+                        <td
+                            colspan="3"
+                            class="text-end fw-bold"
+                        >
+                            Subtotal:
+                        </td>
 
-                            <td
-                                colspan="3"
-                                class="text-end fw-bold"
-                            >
-                                Total:
-                            </td>
+                        <td class="text-end fw-bold">
+                            RD$
+                            {{ number_format($order->subtotal, 2) }}
+                        </td>
 
-                            <td class="text-end fw-bold fs-5">
-                                RD$
-                                {{ number_format($order->total, 2) }}
-                            </td>
+                    </tr>
 
-                        </tr>
+                    <tr>
 
-                    </tfoot>
+                        <td
+                            colspan="3"
+                            class="text-end fw-bold"
+                        >
+                            Impuestos:
+                        </td>
 
-                </table>
+                        <td class="text-end fw-bold">
+                            RD$
+                            {{ number_format($order->tax, 2) }}
+                        </td>
 
-            </div>
+                    </tr>
+
+                    <tr>
+
+                        <td
+                            colspan="3"
+                            class="text-end fw-bold"
+                        >
+                            Total:
+                        </td>
+
+                        <td class="text-end fw-bold fs-5">
+                            RD$
+                            {{ number_format($order->total, 2) }}
+                        </td>
+
+                    </tr>
+
+                </tfoot>
+
+            </table>
 
         </div>
 
     </div>
+
+</div>
 
 @endsection
 

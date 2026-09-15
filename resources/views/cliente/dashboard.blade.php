@@ -6,7 +6,7 @@
 
     <div class="mb-4">
 
-        <h1 class="h3 fw-bold">
+        <h1 class="h3 fw-bold mb-1">
             Dashboard del cliente
         </h1>
 
@@ -18,26 +18,26 @@
 
     <div class="row g-4">
 
-        {{-- Catálogo de productos --}}
-        <div class="col-md-6 col-xl-4">
+        {{-- Catálogo. --}}
+        <div class="col-md-6 col-lg-3">
 
             <div class="card border-0 shadow-sm h-100">
 
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
 
-                    <h5 class="fw-bold">
+                    <h5 class="fw-bold mb-2">
                         Catálogo
                     </h5>
 
-                    <p class="text-muted">
+                    <p class="text-muted flex-grow-1">
                         Consulta los productos disponibles para comprar.
                     </p>
 
                     <a
                         href="{{ route('cliente.catalog') }}"
-                        class="btn btn-primary"
+                        class="btn btn-primary w-100 mt-auto"
                     >
-                        Ver productos
+                        Ver catálogo
                     </a>
 
                 </div>
@@ -46,24 +46,24 @@
 
         </div>
 
-        {{-- Carrito --}}
-        <div class="col-md-6 col-xl-4">
+        {{-- Mi carrito. --}}
+        <div class="col-md-6 col-lg-3">
 
             <div class="card border-0 shadow-sm h-100">
 
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
 
-                    <h5 class="fw-bold">
+                    <h5 class="fw-bold mb-2">
                         Mi carrito
                     </h5>
 
-                    <p class="text-muted">
+                    <p class="text-muted flex-grow-1">
                         Revisa los productos que deseas comprar.
                     </p>
 
                     <a
                         href="{{ route('cliente.cart.index') }}"
-                        class="btn btn-outline-primary"
+                        class="btn btn-primary w-100 mt-auto"
                     >
                         Ver carrito
                     </a>
@@ -74,26 +74,54 @@
 
         </div>
 
-        {{-- Compras --}}
-        <div class="col-md-6 col-xl-4">
+        {{-- Mis compras. --}}
+        <div class="col-md-6 col-lg-3">
 
             <div class="card border-0 shadow-sm h-100">
 
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
 
-                    <h5 class="fw-bold">
+                    <h5 class="fw-bold mb-2">
                         Mis compras
                     </h5>
 
-                    <p class="text-muted">
+                    <p class="text-muted flex-grow-1">
                         Consulta tus compras realizadas.
                     </p>
 
                     <a
                         href="{{ route('cliente.purchases') }}"
-                        class="btn btn-outline-primary"
+                        class="btn btn-primary w-100 mt-auto"
                     >
-                        Ver mis compras
+                        Ver compras
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- Mis devoluciones. --}}
+        <div class="col-md-6 col-lg-3">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body d-flex flex-column">
+
+                    <h5 class="fw-bold mb-2">
+                        Mis devoluciones
+                    </h5>
+
+                    <p class="text-muted flex-grow-1">
+                        Consulta el estado de tus solicitudes de devolución.
+                    </p>
+
+                    <a
+                        href="{{ route('cliente.returns.index') }}"
+                        class="btn btn-primary w-100 mt-auto"
+                    >
+                        Ver devoluciones
                     </a>
 
                 </div>

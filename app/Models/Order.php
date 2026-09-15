@@ -66,4 +66,13 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    /**
+     * Una venta puede tener varias devoluciones.
+     */
+    public function returns(): HasMany
+    {
+        return $this->hasMany(ProductReturn::class);
+    }
 }
+

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AccountingController;
+use App\Http\Controllers\AdminReturnController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ClientController;
@@ -128,7 +129,20 @@ Route::middleware(['auth', 'admin'])
         
         // Muestra el resumen básico de contabilidad.
         Route::get('/contabilidad', [AccountingController::class, 'index'])
-            ->name('accounting.index');  
+            ->name('accounting.index');
+            
+        // Muestra las solicitudes de devolución.
+        Route::get('/devoluciones', [AdminReturnController::class, 'index'])
+            ->name('returns.index');
+            
+        // Aprueba una solicitud de devolución.
+        Route::patch('/devoluciones/{return}/aprobar', [AdminReturnController::class, 'approve'])
+            ->name('returns.approve');
+
+       // Rechaza una solicitud de devolución.
+        Route::patch('/devoluciones/{return}/rechazar', [AdminReturnController::class, 'reject'])
+            ->name('returns.reject');
+
     });
 
 /*
@@ -197,7 +211,19 @@ Route::middleware(['auth', 'role:Cliente'])
         
        // Muestra el detalle de una compra del cliente.
         Route::get('/compras/{order}', [ClienteController::class, 'purchaseShow'])
-            ->name('purchases.show');   
+            ->name('purchases.show');
+        
+       // Muestra las devoluciones del cliente.
+        Route::get('/devoluciones', [ClienteController::class, 'returns'])
+            ->name('returns.index');    
+            
+       // Muestra el formulario para solicitar una devolución.
+        Route::get('/compras/{order}/devolucion', [ClienteController::class, 'returnCreate'])
+            ->name('returns.create');
+            
+        // Registra una solicitud de devolución.
+        Route::post('/compras/{order}/devolucion', [ClienteController::class, 'returnStore'])
+            ->name('returns.store');    
 
         // Agrega un producto al carrito.
         Route::post('/carrito/agregar/{product}', [CartController::class, 'add'])
