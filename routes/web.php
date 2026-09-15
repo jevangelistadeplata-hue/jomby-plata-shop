@@ -188,7 +188,11 @@ Route::middleware(['auth', 'role:Cliente'])
         
        // Muestra las compras realizadas por el cliente.
         Route::get('/compras', [ClienteController::class, 'purchases'])
-            ->name('purchases');       
+            ->name('purchases');   
+        
+       // Muestra el detalle de una compra del cliente.
+        Route::get('/compras/{order}', [ClienteController::class, 'purchaseShow'])
+            ->name('purchases.show');   
 
         // Agrega un producto al carrito.
         Route::post('/carrito/agregar/{product}', [CartController::class, 'add'])

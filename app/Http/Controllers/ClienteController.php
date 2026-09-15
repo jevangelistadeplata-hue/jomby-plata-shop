@@ -61,5 +61,26 @@ class ClienteController extends Controller
 
         return view('cliente.purchases', compact('orders'));
     }
+
+    /**
+     * Muestra el detalle de una compra del cliente autenticado.
+     */
+    public function purchaseShow(Request $request, Order $order)
+    {
+        // Impide que un cliente consulte compras de otro usuario.
+        if ($order->user_id !== $request->user()->id) {
+            abort(
+                403,
+                'No tienes autorización para consultar esta compra.'
+            );
+        }
+
+        // Carga los productos incluidos en la compra.
+        $order->load('items.product');
+
+        return view('cliente.purchase-show', compact('order'));
+    }
 }
+
+
 

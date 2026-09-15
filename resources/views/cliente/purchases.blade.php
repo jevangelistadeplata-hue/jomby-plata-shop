@@ -35,6 +35,7 @@
                                 <th>Estado</th>
                                 <th>Método de pago</th>
                                 <th class="text-end">Total</th>
+                                <th class="text-center">Acción</th>
 
                             </tr>
 
@@ -105,6 +106,17 @@
 
                                     </td>
 
+                                    <td class="text-center">
+
+                                        <a
+                                            href="{{ route('cliente.purchases.show', $order) }}"
+                                            class="btn btn-outline-primary btn-sm"
+                                        >
+                                            Ver detalle
+                                        </a>
+
+                                    </td>
+
                                 </tr>
 
                             @endforeach
@@ -147,4 +159,5 @@
     @endif
 
 @endsection
+
 
