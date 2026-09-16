@@ -5,7 +5,7 @@
 @section('content')
 
     @php
-        $cartQuantity = collect($cart)->sum('quantity');
+        $cartQuantity = $cart->sum('quantity');
     @endphp
 
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -39,7 +39,7 @@
 
     </div>
 
-    @if (count($cart))
+    @if ($cart->isNotEmpty())
 
         <div class="card border-0 shadow-sm">
 
@@ -72,7 +72,9 @@
                             @foreach ($cart as $item)
 
                                 @php
-                                    $subtotal = $item['price'] * $item['quantity'];
+                                    $product = $item->product;
+                                    $price = $product->sale_price;
+                                    $subtotal = $price * $item->quantity;
                                     $total += $subtotal;
                                 @endphp
 
@@ -80,13 +82,13 @@
 
                                     <td>
                                         <strong>
-                                            {{ $item['name'] }}
+                                            {{ $product->name }}
                                         </strong>
                                     </td>
 
                                     <td>
                                         RD$
-                                        {{ number_format($item['price'], 2) }}
+                                        {{ number_format($price, 2) }}
                                     </td>
 
                                     <td class="text-center">
@@ -95,7 +97,7 @@
 
                                             {{-- Disminuir cantidad --}}
                                             <form
-                                                action="{{ route('cliente.cart.decrease', $item['product_id']) }}"
+                                                action="{{ route('cliente.cart.decrease', $product->id) }}"
                                                 method="POST"
                                             >
 
@@ -112,12 +114,12 @@
                                             </form>
 
                                             <span class="fw-bold">
-                                                {{ $item['quantity'] }}
+                                                {{ $item->quantity }}
                                             </span>
 
                                             {{-- Aumentar cantidad --}}
                                             <form
-                                                action="{{ route('cliente.cart.increase', $item['product_id']) }}"
+                                                action="{{ route('cliente.cart.increase', $product->id) }}"
                                                 method="POST"
                                             >
 
@@ -150,7 +152,7 @@
 
                                         {{-- Eliminar producto --}}
                                         <form
-                                            action="{{ route('cliente.cart.remove', $item['product_id']) }}"
+                                            action="{{ route('cliente.cart.remove', $product->id) }}"
                                             method="POST"
                                         >
 
@@ -261,8 +263,6 @@
     @endif
 
 @endsection
-
-
 
 
 

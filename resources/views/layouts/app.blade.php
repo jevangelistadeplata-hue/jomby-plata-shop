@@ -182,7 +182,8 @@
 
                             {{-- Carrito --}}
                             @php
-                                $cartQuantity = collect(session('cart', []))
+                                $cartQuantity = auth()->user()
+                                    ->cartItems()
                                     ->sum('quantity');
                             @endphp
 

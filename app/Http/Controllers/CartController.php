@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -14,8 +15,10 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        // Obtiene el carrito almacenado en la sesión.
-        $cart = $request->session()->get('cart', []);
+        $cart = $request->user()
+            ->cartItems()
+            ->with('product')
+            ->get();
 
         return view('cliente.cart', compact('cart'));
     }
@@ -33,15 +36,17 @@ class CartController extends Controller
             );
         }
 
-        // Obtiene el carrito actual de la sesión.
-        $cart = $request->session()->get('cart', []);
+        // Busca el producto dentro del carrito del cliente.
+        $cartItem = $request->user()
+            ->cartItems()
+            ->where('product_id', $product->id)
+            ->first();
 
-        // Si el producto ya existe en el carrito, aumenta su cantidad.
-        if (isset($cart[$product->id])) {
+        if ($cartItem) {
+            // Calcula la nueva cantidad.
+            $newQuantity = $cartItem->quantity + 1;
 
-            $newQuantity = $cart[$product->id]['quantity'] + 1;
-
-            // Impide agregar más unidades de las disponibles.
+            // Impide superar el stock disponible.
             if ($newQuantity > $product->stock) {
                 return back()->with(
                     'error',
@@ -49,21 +54,16 @@ class CartController extends Controller
                 );
             }
 
-            $cart[$product->id]['quantity'] = $newQuantity;
-
+            $cartItem->update([
+                'quantity' => $newQuantity,
+            ]);
         } else {
-
             // Agrega el producto por primera vez.
-            $cart[$product->id] = [
+            $request->user()->cartItems()->create([
                 'product_id' => $product->id,
-                'name' => $product->name,
-                'price' => $product->sale_price,
                 'quantity' => 1,
-            ];
+            ]);
         }
-
-        // Guarda nuevamente el carrito en la sesión.
-        $request->session()->put('cart', $cart);
 
         return back()->with(
             'success',
@@ -76,11 +76,13 @@ class CartController extends Controller
      */
     public function increase(Request $request, Product $product)
     {
-        // Obtiene el carrito actual de la sesión.
-        $cart = $request->session()->get('cart', []);
+        $cartItem = $request->user()
+            ->cartItems()
+            ->where('product_id', $product->id)
+            ->first();
 
         // Verifica que el producto exista en el carrito.
-        if (! isset($cart[$product->id])) {
+        if (! $cartItem) {
             return back()->with(
                 'error',
                 'El producto no se encuentra en el carrito.'
@@ -88,7 +90,7 @@ class CartController extends Controller
         }
 
         // Calcula la nueva cantidad.
-        $newQuantity = $cart[$product->id]['quantity'] + 1;
+        $newQuantity = $cartItem->quantity + 1;
 
         // Verifica que exista suficiente stock.
         if ($newQuantity > $product->stock) {
@@ -98,11 +100,9 @@ class CartController extends Controller
             );
         }
 
-        // Actualiza la cantidad.
-        $cart[$product->id]['quantity'] = $newQuantity;
-
-        // Guarda el carrito actualizado.
-        $request->session()->put('cart', $cart);
+        $cartItem->update([
+            'quantity' => $newQuantity,
+        ]);
 
         return back()->with(
             'success',
@@ -115,27 +115,25 @@ class CartController extends Controller
      */
     public function decrease(Request $request, Product $product)
     {
-        // Obtiene el carrito actual de la sesión.
-        $cart = $request->session()->get('cart', []);
+        $cartItem = $request->user()
+            ->cartItems()
+            ->where('product_id', $product->id)
+            ->first();
 
         // Verifica que el producto exista en el carrito.
-        if (! isset($cart[$product->id])) {
+        if (! $cartItem) {
             return back()->with(
                 'error',
                 'El producto no se encuentra en el carrito.'
             );
         }
 
-        // Disminuye la cantidad en una unidad.
-        $cart[$product->id]['quantity']--;
-
-        // Si la cantidad llega a cero, elimina el producto.
-        if ($cart[$product->id]['quantity'] <= 0) {
-            unset($cart[$product->id]);
+        // Si hay una sola unidad, elimina el producto.
+        if ($cartItem->quantity <= 1) {
+            $cartItem->delete();
+        } else {
+            $cartItem->decrement('quantity');
         }
-
-        // Guarda el carrito actualizado.
-        $request->session()->put('cart', $cart);
 
         return back()->with(
             'success',
@@ -148,22 +146,20 @@ class CartController extends Controller
      */
     public function remove(Request $request, Product $product)
     {
-        // Obtiene el carrito actual de la sesión.
-        $cart = $request->session()->get('cart', []);
+        $cartItem = $request->user()
+            ->cartItems()
+            ->where('product_id', $product->id)
+            ->first();
 
         // Verifica que el producto exista en el carrito.
-        if (! isset($cart[$product->id])) {
+        if (! $cartItem) {
             return back()->with(
                 'error',
                 'El producto no se encuentra en el carrito.'
             );
         }
 
-        // Elimina completamente el producto.
-        unset($cart[$product->id]);
-
-        // Guarda el carrito actualizado.
-        $request->session()->put('cart', $cart);
+        $cartItem->delete();
 
         return back()->with(
             'success',
@@ -176,11 +172,14 @@ class CartController extends Controller
      */
     public function checkout(Request $request)
     {
-        // Obtiene el carrito almacenado en la sesión.
-        $cart = $request->session()->get('cart', []);
+        // Obtiene el carrito directamente desde la base de datos.
+        $cart = $request->user()
+            ->cartItems()
+            ->with('product')
+            ->get();
 
         // Verifica que existan productos en el carrito.
-        if (empty($cart)) {
+        if ($cart->isEmpty()) {
             return back()->with(
                 'error',
                 'El carrito está vacío.'
@@ -188,13 +187,12 @@ class CartController extends Controller
         }
 
         try {
-
             $order = DB::transaction(function () use ($cart, $request) {
 
-                // Obtiene los identificadores de los productos del carrito.
-                $productIds = array_keys($cart);
+                // Obtiene los identificadores de los productos.
+                $productIds = $cart->pluck('product_id')->all();
 
-                // Consulta los productos directamente desde la base de datos.
+                // Consulta los productos y bloquea sus registros.
                 $products = Product::whereIn('id', $productIds)
                     ->lockForUpdate()
                     ->get()
@@ -205,8 +203,8 @@ class CartController extends Controller
                 // Verifica cada producto y calcula el subtotal.
                 foreach ($cart as $item) {
 
-                    $productId = $item['product_id'];
-                    $quantity = (int) $item['quantity'];
+                    $productId = $item->product_id;
+                    $quantity = (int) $item->quantity;
 
                     // Verifica que el producto todavía exista.
                     if (! isset($products[$productId])) {
@@ -226,7 +224,7 @@ class CartController extends Controller
                         );
                     }
 
-                    // Verifica que la cantidad solicitada sea válida.
+                    // Verifica que la cantidad sea válida.
                     if ($quantity <= 0) {
                         throw new \Exception(
                             'La cantidad de un producto no es válida.'
@@ -249,7 +247,7 @@ class CartController extends Controller
                 // En esta primera versión no se aplica impuesto.
                 $tax = 0;
 
-                // El total corresponde al subtotal más los impuestos.
+                // Calcula el total.
                 $total = $subtotal + $tax;
 
                 // Crea la venta.
@@ -265,12 +263,11 @@ class CartController extends Controller
                 // Crea los detalles de la venta y descuenta el stock.
                 foreach ($cart as $item) {
 
-                    $product = $products[$item['product_id']];
-                    $quantity = (int) $item['quantity'];
+                    $product = $products[$item->product_id];
+                    $quantity = (int) $item->quantity;
 
                     $unitPrice = $product->sale_price;
                     $costPrice = $product->cost_price;
-
                     $itemSubtotal = $unitPrice * $quantity;
 
                     $order->items()->create([
@@ -285,11 +282,13 @@ class CartController extends Controller
                     $product->decrement('stock', $quantity);
                 }
 
+                // Vacía el carrito de este cliente.
+                $request->user()
+                    ->cartItems()
+                    ->delete();
+
                 return $order;
             });
-
-            // Limpia el carrito después de completar la venta.
-            $request->session()->forget('cart');
 
             // Envía al cliente directamente a Mis compras.
             return redirect()
