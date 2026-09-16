@@ -40,15 +40,39 @@ class AdminReturnController extends Controller
     }
 
     /**
-     * Aprueba una solicitud de devolución y restaura el inventario.
+     * Aprueba una solicitud de devolución.
      */
     public function approve(ProductReturn $return)
     {
-        // Impide procesar nuevamente una devolución ya procesada.
+        // Solo se pueden aprobar solicitudes pendientes.
         if ($return->status !== 'pending') {
             return back()->with(
                 'error',
-                'Esta solicitud de devolución ya fue procesada.'
+                'Esta solicitud no está pendiente y no puede ser aprobada.'
+            );
+        }
+
+        // Cambia la solicitud a estado aprobada.
+        $return->update([
+            'status' => 'approved',
+        ]);
+
+        return back()->with(
+            'success',
+            'La solicitud de devolución fue aprobada correctamente. Ahora debe completarse cuando la devolución se haya realizado.'
+        );
+    }
+
+    /**
+     * Completa una devolución aprobada y restaura el inventario.
+     */
+    public function complete(ProductReturn $return)
+    {
+        // Solo se pueden completar devoluciones aprobadas.
+        if ($return->status !== 'approved') {
+            return back()->with(
+                'error',
+                'Solo se pueden completar devoluciones que hayan sido aprobadas.'
             );
         }
 
@@ -57,7 +81,7 @@ class AdminReturnController extends Controller
             // Obtiene el producto relacionado con la devolución.
             $product = $return->product;
 
-            // Aumenta el inventario con la cantidad devuelta.
+            // Restaura el inventario con la cantidad devuelta.
             $product->increment('stock', $return->quantity);
 
             // Marca la devolución como completada.
@@ -69,7 +93,7 @@ class AdminReturnController extends Controller
 
         return back()->with(
             'success',
-            'La devolución fue aprobada, el inventario fue actualizado y la solicitud quedó completada.'
+            'La devolución fue completada, el inventario fue actualizado correctamente y ahora afecta la contabilidad.'
         );
     }
 
@@ -78,11 +102,11 @@ class AdminReturnController extends Controller
      */
     public function reject(ProductReturn $return)
     {
-        // Impide rechazar una solicitud que ya fue procesada.
+        // Solo se pueden rechazar solicitudes pendientes.
         if ($return->status !== 'pending') {
             return back()->with(
                 'error',
-                'Esta solicitud de devolución ya fue procesada.'
+                'Esta solicitud ya fue procesada y no puede ser rechazada.'
             );
         }
 
@@ -98,7 +122,6 @@ class AdminReturnController extends Controller
         );
     }
 }
-
 
 
 

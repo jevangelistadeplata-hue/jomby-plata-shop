@@ -22,7 +22,7 @@
         <div class="card-body">
 
             <form
-                action="{{ route('cliente.catalog') }}"
+                action="{{ request()->routeIs('cliente.catalog') ? route('cliente.catalog') : route('catalog') }}"
                 method="GET"
             >
 

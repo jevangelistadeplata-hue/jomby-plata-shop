@@ -13,9 +13,28 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Página principal
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', function () {
-    return view('home');
+    $categories = \App\Models\Category::where('status', 'active')
+        ->orderBy('name')
+        ->get();
+
+    return view('home', compact('categories'));
 });
+
+/*
+|--------------------------------------------------------------------------
+| Catálogo público
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/productos', [ClienteController::class, 'catalog'])
+    ->name('catalog');
 
 /*
 |--------------------------------------------------------------------------
@@ -126,23 +145,26 @@ Route::middleware(['auth', 'admin'])
         // Muestra el listado de ventas.
         Route::get('/ventas', [SaleController::class, 'index'])
             ->name('sales.index');
-        
+
         // Muestra el resumen básico de contabilidad.
         Route::get('/contabilidad', [AccountingController::class, 'index'])
             ->name('accounting.index');
-            
+
         // Muestra las solicitudes de devolución.
         Route::get('/devoluciones', [AdminReturnController::class, 'index'])
             ->name('returns.index');
-            
+
         // Aprueba una solicitud de devolución.
         Route::patch('/devoluciones/{return}/aprobar', [AdminReturnController::class, 'approve'])
             ->name('returns.approve');
 
-       // Rechaza una solicitud de devolución.
+        // Completa una devolución aprobada.
+        Route::patch('/devoluciones/{return}/completar', [AdminReturnController::class, 'complete'])
+            ->name('returns.complete');    
+
+        // Rechaza una solicitud de devolución.
         Route::patch('/devoluciones/{return}/rechazar', [AdminReturnController::class, 'reject'])
             ->name('returns.reject');
-
     });
 
 /*
@@ -204,48 +226,44 @@ Route::middleware(['auth', 'role:Cliente'])
         // Muestra el carrito del cliente.
         Route::get('/carrito', [CartController::class, 'index'])
             ->name('cart.index');
-        
-       // Muestra las compras realizadas por el cliente.
+
+        // Muestra las compras realizadas por el cliente.
         Route::get('/compras', [ClienteController::class, 'purchases'])
-            ->name('purchases');   
-        
-       // Muestra el detalle de una compra del cliente.
+            ->name('purchases');
+
+        // Muestra el detalle de una compra del cliente.
         Route::get('/compras/{order}', [ClienteController::class, 'purchaseShow'])
             ->name('purchases.show');
-        
-       // Muestra las devoluciones del cliente.
+
+        // Muestra las devoluciones del cliente.
         Route::get('/devoluciones', [ClienteController::class, 'returns'])
-            ->name('returns.index');    
-            
-       // Muestra el formulario para solicitar una devolución.
+            ->name('returns.index');
+
+        // Muestra el formulario para solicitar una devolución.
         Route::get('/compras/{order}/devolucion', [ClienteController::class, 'returnCreate'])
             ->name('returns.create');
-            
+
         // Registra una solicitud de devolución.
         Route::post('/compras/{order}/devolucion', [ClienteController::class, 'returnStore'])
-            ->name('returns.store');    
+            ->name('returns.store');
 
         // Agrega un producto al carrito.
         Route::post('/carrito/agregar/{product}', [CartController::class, 'add'])
             ->name('cart.add');
 
-       // Aumenta la cantidad de un producto del carrito.
+        // Aumenta la cantidad de un producto del carrito.
         Route::patch('/carrito/aumentar/{product}', [CartController::class, 'increase'])
             ->name('cart.increase');
 
-       // Disminuye la cantidad de un producto del carrito.
+        // Disminuye la cantidad de un producto del carrito.
         Route::patch('/carrito/disminuir/{product}', [CartController::class, 'decrease'])
-            ->name('cart.decrease'); 
+            ->name('cart.decrease');
 
-         // Elimina un producto del carrito.
+        // Elimina un producto del carrito.
         Route::delete('/carrito/eliminar/{product}', [CartController::class, 'remove'])
             ->name('cart.remove');
-        
-       // Finaliza la compra del cliente.
+
+        // Finaliza la compra del cliente.
         Route::post('/carrito/finalizar', [CartController::class, 'checkout'])
-            ->name('cart.checkout');     
-            
+            ->name('cart.checkout');
     });
-
-
-

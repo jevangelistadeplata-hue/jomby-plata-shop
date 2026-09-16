@@ -4,12 +4,24 @@
 
 @section('content')
 
+    @php
+        $cartQuantity = collect($cart)->sum('quantity');
+    @endphp
+
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
 
             <h1 class="h3 fw-bold mb-1">
+
+                <i class="bi bi-cart3 me-2"></i>
+
                 Mi carrito
+
+                <span class="badge rounded-pill bg-danger align-middle">
+                    {{ $cartQuantity }}
+                </span>
+
             </h1>
 
             <p class="text-muted mb-0">

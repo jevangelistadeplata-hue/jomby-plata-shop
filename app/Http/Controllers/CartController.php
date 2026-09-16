@@ -53,7 +53,7 @@ class CartController extends Controller
 
         } else {
 
-            // Agrega el producto por primera vez al carrito.
+            // Agrega el producto por primera vez.
             $cart[$product->id] = [
                 'product_id' => $product->id,
                 'name' => $product->name,
@@ -129,7 +129,7 @@ class CartController extends Controller
         // Disminuye la cantidad en una unidad.
         $cart[$product->id]['quantity']--;
 
-        // Si la cantidad llega a cero, elimina el producto del carrito.
+        // Si la cantidad llega a cero, elimina el producto.
         if ($cart[$product->id]['quantity'] <= 0) {
             unset($cart[$product->id]);
         }
@@ -159,7 +159,7 @@ class CartController extends Controller
             );
         }
 
-        // Elimina completamente el producto del carrito.
+        // Elimina completamente el producto.
         unset($cart[$product->id]);
 
         // Guarda el carrito actualizado.
@@ -220,7 +220,9 @@ class CartController extends Controller
                     // Verifica que el producto siga aprobado.
                     if ($product->status !== 'approved') {
                         throw new \Exception(
-                            'El producto "' . $product->name . '" ya no está disponible para la venta.'
+                            'El producto "' .
+                            $product->name .
+                            '" ya no está disponible para la venta.'
                         );
                     }
 
@@ -240,7 +242,7 @@ class CartController extends Controller
                         );
                     }
 
-                    // Calcula el subtotal usando el precio actual de la base de datos.
+                    // Calcula el subtotal usando el precio actual.
                     $subtotal += $product->sale_price * $quantity;
                 }
 
@@ -265,8 +267,10 @@ class CartController extends Controller
 
                     $product = $products[$item['product_id']];
                     $quantity = (int) $item['quantity'];
+
                     $unitPrice = $product->sale_price;
                     $costPrice = $product->cost_price;
+
                     $itemSubtotal = $unitPrice * $quantity;
 
                     $order->items()->create([
@@ -287,8 +291,9 @@ class CartController extends Controller
             // Limpia el carrito después de completar la venta.
             $request->session()->forget('cart');
 
+            // Envía al cliente directamente a Mis compras.
             return redirect()
-                ->route('cliente.dashboard')
+                ->route('cliente.purchases')
                 ->with(
                     'success',
                     'Compra realizada correctamente. Número de venta: ' .
@@ -305,7 +310,3 @@ class CartController extends Controller
         }
     }
 }
-
-
-
-

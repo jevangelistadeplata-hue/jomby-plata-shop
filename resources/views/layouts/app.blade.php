@@ -7,13 +7,20 @@
 
     <title>@yield('title', 'Jomby Plata Shop')</title>
 
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('styles')
 </head>
-<body class="d-flex flex-column h-100 bg-light">
+
+<body class="d-flex flex-column min-vh-100">
 
     {{-- Navegación Principal --}}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
         <div class="container">
 
             {{-- Nombre de la aplicación --}}
@@ -35,6 +42,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="menuPrincipal">
+
                 <ul class="navbar-nav ms-auto align-items-lg-center">
 
                     {{-- Inicio --}}
@@ -162,16 +170,6 @@
                         {{-- Opciones exclusivas del cliente --}}
                         @if (auth()->user()->isClient())
 
-                            {{-- Dashboard del cliente --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('cliente.dashboard') ? 'active' : '' }}"
-                                    href="{{ route('cliente.dashboard') }}"
-                                >
-                                    Dashboard
-                                </a>
-                            </li>
-
                             {{-- Productos --}}
                             <li class="nav-item">
                                 <a
@@ -183,22 +181,44 @@
                             </li>
 
                             {{-- Carrito --}}
+                            @php
+                                $cartQuantity = collect(session('cart', []))
+                                    ->sum('quantity');
+                            @endphp
+
                             <li class="nav-item">
                                 <a
                                     class="nav-link {{ request()->routeIs('cliente.cart.index') ? 'active' : '' }}"
                                     href="{{ route('cliente.cart.index') }}"
                                 >
+                                    <i class="bi bi-cart3 me-1"></i>
                                     Mi carrito
+
+                                    <span
+                                        class="badge rounded-pill bg-danger ms-1"
+                                    >
+                                        {{ $cartQuantity }}
+                                    </span>
                                 </a>
                             </li>
 
                             {{-- Compras --}}
                             <li class="nav-item">
                                 <a
-                                    class="nav-link {{ request()->routeIs('cliente.purchases') ? 'active' : '' }}"
+                                    class="nav-link {{ request()->routeIs('cliente.purchases*') ? 'active' : '' }}"
                                     href="{{ route('cliente.purchases') }}"
                                 >
                                     Mis compras
+                                </a>
+                            </li>
+
+                            {{-- Devoluciones --}}
+                            <li class="nav-item">
+                                <a
+                                    class="nav-link {{ request()->routeIs('cliente.returns.*') ? 'active' : '' }}"
+                                    href="{{ route('cliente.returns.index') }}"
+                                >
+                                    Mis devoluciones
                                 </a>
                             </li>
 
@@ -269,6 +289,7 @@
 
         {{-- Mensaje de éxito --}}
         @if (session('success'))
+
             <div
                 class="alert alert-success alert-dismissible fade show"
                 role="alert"
@@ -282,10 +303,12 @@
                     aria-label="Cerrar"
                 ></button>
             </div>
+
         @endif
 
         {{-- Mensaje de error --}}
         @if (session('error'))
+
             <div
                 class="alert alert-danger alert-dismissible fade show"
                 role="alert"
@@ -299,6 +322,7 @@
                     aria-label="Cerrar"
                 ></button>
             </div>
+
         @endif
 
         @yield('content')
@@ -307,13 +331,18 @@
 
     {{-- Pie de página --}}
     <footer class="bg-dark text-white text-center py-3 mt-auto">
+
         <div class="container">
+
             <small>
                 Jomby Plata Shop © {{ date('Y') }} - Proyecto académico INFOTEP
             </small>
+
         </div>
+
     </footer>
 
     @stack('scripts')
+
 </body>
 </html>

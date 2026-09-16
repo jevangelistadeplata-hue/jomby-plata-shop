@@ -1,0 +1,140 @@
+/*
+|--------------------------------------------------------------------------
+| Dashboard administrativo - Jomby Plata Shop
+|--------------------------------------------------------------------------
+*/
+
+/* Tarjetas principales del dashboard */
+
+.dashboard-card {
+    border: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.10) !important;
+}
+
+
+/* Iconos de las tarjetas */
+
+.dashboard-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+
+/* Colores de los iconos */
+
+.icon-blue {
+    background-color: #e7f1ff;
+    color: #0d6efd;
+}
+
+.icon-green {
+    background-color: #e8f7ee;
+    color: #198754;
+}
+
+.icon-purple {
+    background-color: #f0e8ff;
+    color: #6f42c1;
+}
+
+.icon-orange {
+    background-color: #fff1df;
+    color: #fd7e14;
+}
+
+.icon-red {
+    background-color: #fdeaea;
+    color: #dc3545;
+}
+
+.icon-yellow {
+    background-color: #fff8df;
+    color: #ffc107;
+}
+
+
+/* Títulos de las secciones */
+
+.section-title {
+    font-weight: 700;
+    position: relative;
+    padding-left: 14px;
+}
+
+.section-title::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    bottom: 2px;
+    width: 4px;
+    border-radius: 2px;
+    background-color: var(--bs-primary);
+}
+
+
+/* Tarjeta del gráfico */
+
+.chart-card {
+    border: 0;
+    border-radius: 14px;
+}
+
+
+/* Contenedor del gráfico */
+
+#salesChartContainer {
+    position: relative;
+    width: 100%;
+}
+
+
+/* Tarjetas de pendientes de aprobación */
+
+.pending-card {
+    border: 0;
+    border-left: 4px solid #fd7e14;
+    border-radius: 10px;
+}
+
+.pending-card .dashboard-icon {
+    font-size: 1.1rem;
+}
+
+
+/* Separación entre bloques del dashboard */
+
+.dashboard-section {
+    margin-top: 2.5rem;
+}
+
+
+/* Ajustes para dispositivos pequeños */
+
+@media (max-width: 576px) {
+
+    .dashboard-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1.1rem;
+    }
+
+    .pending-card .dashboard-icon {
+        font-size: 1rem;
+    }
+
+}
