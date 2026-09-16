@@ -21,6 +21,14 @@ El sistema también incorpora un módulo de devoluciones y un módulo de contabi
 
 ---
 
+## Problema o necesidad
+
+Jomby Plata Shop busca facilitar la gestión de las operaciones básicas de un comercio electrónico, integrando en una misma aplicación la gestión de productos, proveedores, clientes, inventario, ventas, devoluciones y contabilidad básica.
+
+De esta manera, se centraliza la información del negocio y se facilita el seguimiento de las operaciones realizadas por los diferentes usuarios del sistema.
+
+---
+
 ## Roles del sistema
 
 ### Administrador / Contador
@@ -94,6 +102,7 @@ Puede:
 * Eliminar productos.
 * Visualizar cantidad de productos.
 * Finalizar compra.
+* Persistencia del carrito asociado al usuario.
 
 ### Ventas
 
@@ -157,6 +166,22 @@ El módulo contable permite consultar:
 
 ---
 
+## Requisitos
+
+Para ejecutar el proyecto se requiere:
+
+* PHP 8.2 o superior.
+* Composer.
+* Node.js y npm.
+* MySQL o MariaDB.
+* Git.
+* Un entorno de servidor local como XAMPP.
+* Extensiones de PHP requeridas por Laravel.
+
+Para este proyecto se utiliza MySQL/MariaDB mediante el puerto `3307`.
+
+---
+
 ## Base de datos
 
 El sistema utiliza una base de datos relacional para almacenar la información de:
@@ -166,6 +191,7 @@ El sistema utiliza una base de datos relacional para almacenar la información d
 * Productos.
 * Órdenes de compra.
 * Detalles de órdenes.
+* Carritos de compra.
 * Devoluciones.
 
 Las operaciones de base de datos se gestionan mediante los modelos de Laravel y Eloquent ORM.
