@@ -1,12 +1,11 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 
-
 /* =========================================================
-   Estilos generales
+   ESTILOS GENERALES
    ========================================================= */
 
 body {
-    background-color: #f5f7fa !important;
+    background-color: #f5f7fa;
     color: #212529;
 }
 
@@ -14,9 +13,8 @@ main {
     min-height: 70vh;
 }
 
-
 /* =========================================================
-   Navegación
+   NAVEGACIÓN
    ========================================================= */
 
 .navbar {
@@ -36,9 +34,8 @@ main {
     font-weight: 600;
 }
 
-
 /* =========================================================
-   Botones
+   BOTONES
    ========================================================= */
 
 .btn {
@@ -50,9 +47,8 @@ main {
     transform: translateY(-1px);
 }
 
-
 /* =========================================================
-   Tarjetas
+   TARJETAS
    ========================================================= */
 
 .card {
@@ -65,9 +61,8 @@ main {
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-
 /* =========================================================
-   Tablas
+   TABLAS
    ========================================================= */
 
 .table {
@@ -79,9 +74,8 @@ main {
     white-space: nowrap;
 }
 
-
 /* =========================================================
-   Formularios
+   FORMULARIOS
    ========================================================= */
 
 .form-control,
@@ -95,9 +89,8 @@ main {
     box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.12);
 }
 
-
 /* =========================================================
-   Alertas
+   ALERTAS
    ========================================================= */
 
 .alert {
@@ -105,9 +98,8 @@ main {
     border-radius: 10px;
 }
 
-
 /* =========================================================
-   Badges
+   BADGES
    ========================================================= */
 
 .badge {
@@ -115,18 +107,165 @@ main {
     padding: 0.5em 0.7em;
 }
 
-
 /* =========================================================
-   Pie de página
+   PIE DE PÁGINA
    ========================================================= */
 
 footer {
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
 }
 
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+/*
+   El layout principal utiliza:
+
+   <main class="container py-4 flex-grow-1">
+
+   El login sale visualmente del container para que
+   el fondo ocupe todo el ancho de la pantalla.
+*/
+
+.login-background {
+    position: relative;
+
+    width: 100vw;
+
+    margin-left: calc(50% - 50vw);
+    margin-top: -1.5rem;
+    margin-bottom: -1.5rem;
+
+    min-height: calc(100vh - 56px - 58px);
+
+    padding: 40px 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-image: var(--bg-image);
+
+    /*
+       Se utiliza 100% 100% para evitar el recorte
+       excesivo que producía el efecto de zoom.
+    */
+    background-size: 100% 100%;
+
+    background-position: center;
+    background-repeat: no-repeat;
+}
 
 /* =========================================================
-   Diseño adaptable
+   CONTENEDOR DEL FORMULARIO
+   ========================================================= */
+
+.login-form-container {
+    width: 100%;
+    max-width: 430px;
+}
+
+/* =========================================================
+   TARJETA TRANSPARENTE
+   ========================================================= */
+
+.login-card {
+    width: 100%;
+
+    background: rgba(255, 255, 255, 0.70);
+
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+
+    border: 1px solid rgba(255, 255, 255, 0.45);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.25);
+
+    overflow: hidden;
+
+    color: #212529;
+}
+
+/* =========================================================
+   ENCABEZADO DEL LOGIN
+   ========================================================= */
+
+.login-card-header {
+    padding: 24px 25px 10px;
+    text-align: center;
+}
+
+.login-card-header h4 {
+    margin: 0;
+
+    font-weight: 600;
+
+    color: #212529;
+}
+
+/* =========================================================
+   CUERPO DEL LOGIN
+   ========================================================= */
+
+.login-card-body {
+    padding: 20px 30px 30px;
+
+    color: #212529;
+}
+
+.login-card label {
+    color: #212529;
+}
+
+.login-card .form-control {
+    background: rgba(255, 255, 255, 0.88);
+
+    border: 1px solid rgba(0, 0, 0, 0.12);
+
+    color: #212529;
+}
+
+.login-card .form-control:focus {
+    background: #ffffff;
+
+    color: #212529;
+}
+
+.login-card .form-check-label {
+    color: #212529;
+}
+
+.login-card .btn {
+    padding: 0.7rem 1rem;
+}
+
+/* =========================================================
+   LOGIN - DISPOSITIVOS MÓVILES
+   ========================================================= */
+
+@media (max-width: 576px) {
+
+    .login-background {
+        min-height: calc(100vh - 56px - 58px);
+
+        padding: 25px 15px;
+    }
+
+    .login-form-container {
+        max-width: 100%;
+    }
+
+    .login-card-body {
+        padding: 20px;
+    }
+}
+
+/* =========================================================
+   DISEÑO ADAPTABLE
    ========================================================= */
 
 @media (max-width: 991.98px) {
@@ -135,5 +274,4 @@ footer {
         padding-top: 0.6rem;
         padding-bottom: 0.6rem;
     }
-
 }

@@ -4,15 +4,20 @@
 
 @section('content')
 
-    <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-5">
+    <div
+        class="login-background"
+        style="--bg-image: url('{{ asset('images/login/login_background.jpg') }}');"
+    >
 
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white text-center">
-                    <h4 class="mb-0">Iniciar sesión</h4>
+        <div class="login-form-container">
+
+            <div class="login-card">
+
+                <div class="login-card-header">
+                    <h4>Iniciar sesión</h4>
                 </div>
 
-                <div class="card-body p-4">
+                <div class="login-card-body">
 
                     <form method="POST" action="{{ route('login.store') }}">
                         @csrf
@@ -99,9 +104,11 @@
                     </div>
 
                 </div>
+
             </div>
 
         </div>
+
     </div>
 
 @endsection
