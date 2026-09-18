@@ -29,8 +29,7 @@ class ClienteController extends Controller
                 $query->where('category_id', $category);
             })
             ->latest()
-            ->paginate(12)
-            ->withQueryString();
+            ->get();
 
         $categories = Category::orderBy('name')->get();
 
