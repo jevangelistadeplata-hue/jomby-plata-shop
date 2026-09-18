@@ -1,300 +1,542 @@
 <!DOCTYPE html>
 <html lang="es" class="h-100">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Jomby Plata Shop')</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="csrf-token"
+        content="{{ csrf_token() }}"
+    >
+
+    <title>
+        @yield('title', 'Jomby Plata Shop')
+    </title>
 
     <link
         rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     >
 
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >    
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     @stack('styles')
+
 </head>
+
 
 <body class="d-flex flex-column min-vh-100">
 
-    {{-- Navegación Principal --}}
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
-        <div class="container">
+    {{-- =========================================================
+         ENCABEZADO PRINCIPAL
+         ========================================================= --}}
 
-            {{-- Nombre de la aplicación --}}
-            <a class="navbar-brand fw-bold" href="{{ url('/') }}">
-                Jomby Plata Shop
-            </a>
+    <header class="jomby-header">
 
-            {{-- Botón para menú en dispositivos pequeños --}}
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#menuPrincipal"
-                aria-controls="menuPrincipal"
-                aria-expanded="false"
-                aria-label="Mostrar navegación"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <div class="collapse navbar-collapse" id="menuPrincipal">
+        {{-- =====================================================
+             BARRA SUPERIOR
+             Logo + nombre de la tienda + usuario
+             ===================================================== --}}
 
-                <ul class="navbar-nav ms-auto align-items-lg-center">
+        <div class="jomby-topbar">
 
-                    {{-- Inicio --}}
-                    <li class="nav-item">
-                        <a
-                            class="nav-link {{ request()->is('/') ? 'active' : '' }}"
-                            href="{{ url('/') }}"
+            <div class="container">
+
+                <div class="jomby-topbar-content">
+
+
+                    {{-- =================================================
+                         LOGO + NOMBRE DE LA TIENDA
+                         ================================================= --}}
+
+                    <a
+                        href="{{ url('/') }}"
+                        class="jomby-brand"
+                    >
+
+                        <img
+                            src="{{ asset('images/logo/logo.png') }}"
+                            alt="Jomby Plata Shop"
+                            class="logo-jomby"
+                            fetchpriority="high"
+                            decoding="async"
                         >
-                            Inicio
-                        </a>
-                    </li>
 
-                    @auth
+                        <span class="jomby-store-name">
+                            Jomby Plata Shop
+                        </span>
 
-                        {{-- Opciones exclusivas del administrador --}}
-                        @if (auth()->user()->isAdmin())
+                    </a>
 
-                            {{-- Dashboard --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-                                    href="{{ route('admin.dashboard') }}"
+
+                    {{-- =================================================
+                         INFORMACIÓN DEL USUARIO
+                         ================================================= --}}
+
+                    <div class="jomby-user-area">
+
+                        @auth
+
+                            <div class="jomby-user">
+
+                                {{-- Información del usuario --}}
+
+                                <div class="jomby-user-info">
+
+                                    <i
+                                        class="bi bi-person-circle jomby-user-icon"
+                                    ></i>
+
+                                    <div class="jomby-user-details">
+
+                                        <div class="jomby-welcome">
+                                            Bienvenido(a)
+                                            {{ auth()->user()->name }}
+                                        </div>
+
+                                        <div class="jomby-last-login">
+
+                                            Última conexión:
+
+                                            @if (session('last_login_at'))
+                                                {{ session('last_login_at') }}
+                                            @else
+                                                Primera conexión
+                                            @endif
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                {{-- Cerrar sesión --}}
+
+                                <form
+                                    method="POST"
+                                    action="{{ route('logout') }}"
+                                    class="m-0"
                                 >
-                                    Dashboard
-                                </a>
-                            </li>
 
-                            {{-- Productos --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}"
-                                    href="{{ route('admin.products.index') }}"
-                                >
-                                    Productos
-                                </a>
-                            </li>
+                                    @csrf
 
-                            {{-- Proveedores --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('admin.suppliers.*') ? 'active' : '' }}"
-                                    href="{{ route('admin.suppliers.index') }}"
-                                >
-                                    Proveedores
-                                </a>
-                            </li>
-
-                            {{-- Clientes --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('admin.clients.*') ? 'active' : '' }}"
-                                    href="{{ route('admin.clients.index') }}"
-                                >
-                                    Clientes
-                                </a>
-                            </li>
-
-                            {{-- Ventas --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('admin.sales.*') ? 'active' : '' }}"
-                                    href="{{ route('admin.sales.index') }}"
-                                >
-                                    Ventas
-                                </a>
-                            </li>
-
-                            {{-- Contabilidad --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('admin.accounting.index') ? 'active' : '' }}"
-                                    href="{{ route('admin.accounting.index') }}"
-                                >
-                                    Contabilidad
-                                </a>
-                            </li>
-
-                            {{-- Devoluciones --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('admin.returns.index') ? 'active' : '' }}"
-                                    href="{{ route('admin.returns.index') }}"
-                                >
-                                    Devoluciones
-                                </a>
-                            </li>
-
-                        @endif
-
-                        {{-- Opciones exclusivas del proveedor --}}
-                        @if (auth()->user()->isSupplier())
-
-                            {{-- Dashboard del proveedor --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('proveedor.dashboard') ? 'active' : '' }}"
-                                    href="{{ route('proveedor.dashboard') }}"
-                                >
-                                    Dashboard
-                                </a>
-                            </li>
-
-                            {{-- Mis productos --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('proveedor.products.index') ? 'active' : '' }}"
-                                    href="{{ route('proveedor.products.index') }}"
-                                >
-                                    Mis productos
-                                </a>
-                            </li>
-
-                            {{-- Registrar producto --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('proveedor.products.create') ? 'active' : '' }}"
-                                    href="{{ route('proveedor.products.create') }}"
-                                >
-                                    Registrar producto
-                                </a>
-                            </li>
-
-                        @endif
-
-                        {{-- Opciones exclusivas del cliente --}}
-                        @if (auth()->user()->isClient())
-
-                            {{-- Productos --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('cliente.catalog') ? 'active' : '' }}"
-                                    href="{{ route('cliente.catalog') }}"
-                                >
-                                    Productos
-                                </a>
-                            </li>
-
-                            {{-- Carrito --}}
-                            @php
-                                $cartQuantity = auth()->user()
-                                    ->cartItems()
-                                    ->sum('quantity');
-                            @endphp
-
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('cliente.cart.index') ? 'active' : '' }}"
-                                    href="{{ route('cliente.cart.index') }}"
-                                >
-                                    <i class="bi bi-cart3 me-1"></i>
-                                    Mi carrito
-
-                                    <span
-                                        class="badge rounded-pill bg-danger ms-1"
+                                    <button
+                                        type="submit"
+                                        class="jomby-logout"
                                     >
-                                        {{ $cartQuantity }}
-                                    </span>
-                                </a>
-                            </li>
 
-                            {{-- Compras --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('cliente.purchases*') ? 'active' : '' }}"
-                                    href="{{ route('cliente.purchases') }}"
-                                >
-                                    Mis compras
-                                </a>
-                            </li>
+                                        <i class="bi bi-box-arrow-right"></i>
 
-                            {{-- Devoluciones --}}
-                            <li class="nav-item">
-                                <a
-                                    class="nav-link {{ request()->routeIs('cliente.returns.*') ? 'active' : '' }}"
-                                    href="{{ route('cliente.returns.index') }}"
-                                >
-                                    Mis devoluciones
-                                </a>
-                            </li>
+                                        Cerrar sesión
 
-                        @endif
+                                    </button>
 
-                    @endauth
+                                </form>
 
-                    {{-- Opciones para usuarios no autenticados --}}
-                    @guest
+                            </div>
 
-                        {{-- Iniciar sesión --}}
-                        <li class="nav-item">
+                        @else
+
+                            {{-- Iniciar sesión --}}
+
                             <a
-                                class="nav-link {{ request()->routeIs('login') ? 'active' : '' }}"
                                 href="{{ route('login') }}"
+                                class="jomby-user-link"
                             >
+
+                                <i class="bi bi-box-arrow-in-right me-1"></i>
+
                                 Iniciar sesión
-                            </a>
-                        </li>
 
-                        {{-- Registrarse --}}
-                        <li class="nav-item">
+                            </a>
+
+
+                            {{-- Registrarse --}}
+
                             <a
-                                class="nav-link {{ request()->routeIs('register') ? 'active' : '' }}"
                                 href="{{ route('register') }}"
+                                class="jomby-user-link ms-3"
                             >
+
+                                <i class="bi bi-person-plus me-1"></i>
+
                                 Registrarse
+
                             </a>
-                        </li>
 
-                    @else
+                        @endauth
 
-                        {{-- Nombre del usuario autenticado --}}
-                        <li class="nav-item ms-lg-2">
-                            <span class="nav-link text-light fw-medium">
-                                Hola, {{ auth()->user()->name }}
-                            </span>
-                        </li>
+                    </div>
 
-                        {{-- Cerrar sesión --}}
-                        <li class="nav-item">
-                            <form
-                                method="POST"
-                                action="{{ route('logout') }}"
-                                class="d-inline"
-                            >
-                                @csrf
+                </div>
 
-                                <button
-                                    type="submit"
-                                    class="nav-link btn btn-link text-decoration-none border-0 py-0"
-                                >
-                                    Cerrar sesión
-                                </button>
-                            </form>
-                        </li>
-
-                    @endguest
-
-                </ul>
             </div>
 
         </div>
-    </nav>
 
-    {{-- Contenido Principal --}}
+
+        {{-- =====================================================
+             BARRA DE NAVEGACIÓN
+             ===================================================== --}}
+
+        <nav class="jomby-menubar">
+
+            <div class="container">
+
+
+                {{-- =================================================
+                     BOTÓN MENÚ MÓVIL
+                     ================================================= --}}
+
+                <button
+                    class="navbar-toggler jomby-toggler d-lg-none"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal"
+                    aria-expanded="false"
+                    aria-label="Mostrar navegación"
+                >
+
+                    <span class="navbar-toggler-icon"></span>
+
+                </button>
+
+
+                {{-- =================================================
+                     MENÚ PRINCIPAL
+                     ================================================= --}}
+
+                <div
+                    class="collapse d-lg-block"
+                    id="menuPrincipal"
+                >
+
+                    <ul class="navbar-nav flex-lg-row align-items-lg-center">
+
+
+                        {{-- =================================================
+                             USUARIOS NO AUTENTICADOS
+                             ================================================= --}}
+
+                        @guest
+
+                            {{-- Inicio --}}
+
+                            <li class="nav-item">
+
+                                <a
+                                    class="nav-link {{ request()->is('/') ? 'active' : '' }}"
+                                    href="{{ url('/') }}"
+                                >
+                                    Inicio
+                                </a>
+
+                            </li>
+
+                        @endguest
+
+
+                        {{-- =================================================
+                             USUARIOS AUTENTICADOS
+                             ================================================= --}}
+
+                        @auth
+
+
+                            {{-- =================================================
+                                 ADMINISTRADOR / CONTADOR
+                                 ================================================= --}}
+
+                            @if (auth()->user()->isAdmin())
+
+
+                                {{-- Dashboard --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                                        href="{{ route('admin.dashboard') }}"
+                                    >
+                                        Dashboard
+                                    </a>
+
+                                </li>
+
+
+                                {{-- Productos --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}"
+                                        href="{{ route('admin.products.index') }}"
+                                    >
+                                        Productos
+                                    </a>
+
+                                </li>
+
+
+                                {{-- Proveedores --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('admin.suppliers.*') ? 'active' : '' }}"
+                                        href="{{ route('admin.suppliers.index') }}"
+                                    >
+                                        Proveedores
+                                    </a>
+
+                                </li>
+
+
+                                {{-- Clientes --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('admin.clients.*') ? 'active' : '' }}"
+                                        href="{{ route('admin.clients.index') }}"
+                                    >
+                                        Clientes
+                                    </a>
+
+                                </li>
+
+
+                                {{-- Ventas --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('admin.sales.*') ? 'active' : '' }}"
+                                        href="{{ route('admin.sales.index') }}"
+                                    >
+                                        Ventas
+                                    </a>
+
+                                </li>
+
+
+                                {{-- Contabilidad --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('admin.accounting.index') ? 'active' : '' }}"
+                                        href="{{ route('admin.accounting.index') }}"
+                                    >
+                                        Contabilidad
+                                    </a>
+
+                                </li>
+
+
+                                {{-- Devoluciones --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('admin.returns.index') ? 'active' : '' }}"
+                                        href="{{ route('admin.returns.index') }}"
+                                    >
+                                        Devoluciones
+                                    </a>
+
+                                </li>
+
+
+                            @endif
+
+
+                            {{-- =================================================
+                                 PROVEEDOR
+                                 ================================================= --}}
+
+                            @if (auth()->user()->isSupplier())
+
+
+                                {{-- Dashboard --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('proveedor.dashboard') ? 'active' : '' }}"
+                                        href="{{ route('proveedor.dashboard') }}"
+                                    >
+                                        Dashboard
+                                    </a>
+
+                                </li>
+
+
+                                {{-- Mis productos --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('proveedor.products.index') ? 'active' : '' }}"
+                                        href="{{ route('proveedor.products.index') }}"
+                                    >
+                                        Mis productos
+                                    </a>
+
+                                </li>
+
+
+                                {{-- Registrar producto --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('proveedor.products.create') ? 'active' : '' }}"
+                                        href="{{ route('proveedor.products.create') }}"
+                                    >
+                                        Registrar producto
+                                    </a>
+
+                                </li>
+
+
+                            @endif
+
+
+                            {{-- =================================================
+                                 CLIENTE
+                                 ================================================= --}}
+
+                            @if (auth()->user()->isClient())
+
+
+                                {{-- Productos --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('cliente.catalog') ? 'active' : '' }}"
+                                        href="{{ route('cliente.catalog') }}"
+                                    >
+                                        Productos
+                                    </a>
+
+                                </li>
+
+
+                                {{-- =================================================
+                                     CARRITO
+                                     ================================================= --}}
+
+                                @php
+
+                                    $cartQuantity = auth()->user()
+                                        ->cartItems()
+                                        ->sum('quantity');
+
+                                @endphp
+
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('cliente.cart.index') ? 'active' : '' }}"
+                                        href="{{ route('cliente.cart.index') }}"
+                                    >
+
+                                        <i class="bi bi-cart3 me-1"></i>
+
+                                        Mi carrito
+
+                                        <span
+                                            class="badge rounded-pill bg-danger ms-1"
+                                        >
+                                            {{ $cartQuantity }}
+                                        </span>
+
+                                    </a>
+
+                                </li>
+
+
+                                {{-- Mis compras --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('cliente.purchases*') ? 'active' : '' }}"
+                                        href="{{ route('cliente.purchases') }}"
+                                    >
+                                        Mis compras
+                                    </a>
+
+                                </li>
+
+
+                                {{-- Mis devoluciones --}}
+
+                                <li class="nav-item">
+
+                                    <a
+                                        class="nav-link {{ request()->routeIs('cliente.returns.*') ? 'active' : '' }}"
+                                        href="{{ route('cliente.returns.index') }}"
+                                    >
+                                        Mis devoluciones
+                                    </a>
+
+                                </li>
+
+
+                            @endif
+
+
+                        @endauth
+
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    {{-- =========================================================
+         CONTENIDO PRINCIPAL
+         ========================================================= --}}
+
     <main class="container py-4 flex-grow-1">
 
-        {{-- Mensaje de éxito --}}
+
+        {{-- =====================================================
+             MENSAJE DE ÉXITO
+             ===================================================== --}}
+
         @if (session('success'))
 
             <div
                 class="alert alert-success alert-dismissible fade show"
                 role="alert"
             >
+
                 {{ session('success') }}
 
                 <button
@@ -303,17 +545,23 @@
                     data-bs-dismiss="alert"
                     aria-label="Cerrar"
                 ></button>
+
             </div>
 
         @endif
 
-        {{-- Mensaje de error --}}
+
+        {{-- =====================================================
+             MENSAJE DE ERROR
+             ===================================================== --}}
+
         @if (session('error'))
 
             <div
                 class="alert alert-danger alert-dismissible fade show"
                 role="alert"
             >
+
                 {{ session('error') }}
 
                 <button
@@ -322,15 +570,22 @@
                     data-bs-dismiss="alert"
                     aria-label="Cerrar"
                 ></button>
+
             </div>
 
         @endif
 
+
         @yield('content')
+
 
     </main>
 
-    {{-- Pie de página --}}
+
+    {{-- =========================================================
+         PIE DE PÁGINA
+         ========================================================= --}}
+
     <footer class="bg-dark text-white text-center py-3 mt-auto">
 
         <div class="container">
@@ -343,7 +598,10 @@
 
     </footer>
 
+
     @stack('scripts')
 
+
 </body>
+
 </html>

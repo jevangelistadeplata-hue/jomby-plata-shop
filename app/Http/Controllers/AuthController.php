@@ -34,6 +34,43 @@ class AuthController extends Controller
         $remember = $request->boolean('remember');
 
         if (Auth::attempt($credentials, $remember)) {
+
+            /*
+             * Obtenemos nuevamente el usuario mediante el modelo User.
+             * Esto permite trabajar directamente con Eloquent.
+             */
+            $user = User::findOrFail(Auth::id());
+
+            /*
+             * Guardamos en la sesión la fecha de la conexión anterior
+             * antes de actualizarla con la conexión actual.
+             */
+            if ($user->last_login_at) {
+                $request->session()->put(
+                    'last_login_at',
+                    $user->last_login_at
+                        ->format('d/m/Y h:i:s A')
+                );
+
+            } else {
+                $request->session()->put(
+                    'last_login_at',
+                    null
+                );
+            }
+            
+            $user->last_login_at = now();
+            $user->save();
+
+            /*
+             * Actualizamos la fecha y hora de la conexión actual.
+             */
+            $user->last_login_at = now('America/Santo_Domingo');
+            $user->save();
+
+            /*
+             * Regeneramos la sesión por seguridad.
+             */
             $request->session()->regenerate();
 
             return redirect()->intended('/')->with(
@@ -123,6 +160,7 @@ class AuthController extends Controller
             ]);
 
             if ($role->name === 'Proveedor') {
+
                 Supplier::create([
                     'user_id' => $user->id,
                     'business_name' => $validated['business_name'],
@@ -136,6 +174,7 @@ class AuthController extends Controller
         });
 
         if ($role->name === 'Proveedor') {
+
             return redirect()
                 ->route('login')
                 ->with(
@@ -162,6 +201,7 @@ class AuthController extends Controller
         Auth::logout();
 
         $request->session()->invalidate();
+
         $request->session()->regenerateToken();
 
         return redirect('/')->with(
@@ -170,3 +210,4 @@ class AuthController extends Controller
         );
     }
 }
+
