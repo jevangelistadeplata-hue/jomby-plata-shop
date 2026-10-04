@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-09-2026 a las 00:29:21
+-- Tiempo de generación: 18-09-2026 a las 23:51:05
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -38,8 +38,8 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('laravel-cache-5c785c036466adea360111aa28563bfd556b5fba', 'i:2;', 1789597287),
-('laravel-cache-5c785c036466adea360111aa28563bfd556b5fba:timer', 'i:1789597287;', 1789597287);
+('laravel-cache-5c785c036466adea360111aa28563bfd556b5fba', 'i:1;', 1789767489),
+('laravel-cache-5c785c036466adea360111aa28563bfd556b5fba:timer', 'i:1789767489;', 1789767489);
 
 -- --------------------------------------------------------
 
@@ -73,9 +73,9 @@ CREATE TABLE `cart_items` (
 --
 
 INSERT INTO `cart_items` (`id`, `user_id`, `product_id`, `quantity`, `created_at`, `updated_at`) VALUES
-(1, 10, 9, 1, '2026-09-17 01:41:43', '2026-09-17 01:41:43'),
-(2, 10, 10, 1, '2026-09-17 01:41:44', '2026-09-17 01:41:44'),
-(3, 10, 18, 1, '2026-09-17 01:41:44', '2026-09-17 01:41:44');
+(9, 10, 25, 1, '2026-09-18 20:49:58', '2026-09-18 20:49:58'),
+(10, 10, 24, 1, '2026-09-18 20:50:06', '2026-09-18 20:50:06'),
+(11, 10, 23, 1, '2026-09-18 20:50:13', '2026-09-18 20:50:13');
 
 -- --------------------------------------------------------
 
@@ -187,7 +187,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (12, '2026_09_15_173539_add_cost_price_to_order_items_table', 3),
 (13, '2026_09_15_200131_create_returns_table', 4),
 (14, '2026_09_16_142825_add_image_to_categories_table', 5),
-(15, '2026_09_16_213406_create_cart_items_table', 6);
+(15, '2026_09_16_213406_create_cart_items_table', 6),
+(16, '2026_09_18_150259_add_last_login_at_to_users_table', 7);
 
 -- --------------------------------------------------------
 
@@ -220,7 +221,8 @@ INSERT INTO `orders` (`id`, `order_number`, `user_id`, `status`, `payment_method
 (4, 'ORD-XCTQFNJJ', 10, 'confirmed', 'cash', 1872.00, 0.00, 1872.00, NULL, '2026-09-16 01:36:55', '2026-09-16 01:36:55'),
 (5, 'ORD-3VA0XAUM', 10, 'confirmed', 'cash', 1716.00, 0.00, 1716.00, NULL, '2026-09-17 00:41:06', '2026-09-17 00:41:06'),
 (6, 'ORD-ORAS9J5R', 10, 'confirmed', 'cash', 918.00, 0.00, 918.00, NULL, '2026-09-17 00:46:12', '2026-09-17 00:46:12'),
-(7, 'ORD-MDMBTIFB', 13, 'confirmed', 'cash', 1820.00, 0.00, 1820.00, NULL, '2026-09-17 02:12:44', '2026-09-17 02:12:44');
+(7, 'ORD-MDMBTIFB', 13, 'confirmed', 'cash', 1820.00, 0.00, 1820.00, NULL, '2026-09-17 02:12:44', '2026-09-17 02:12:44'),
+(8, 'ORD-CUCINGKS', 10, 'confirmed', 'cash', 3211.00, 0.00, 3211.00, NULL, '2026-09-18 20:49:42', '2026-09-18 20:49:42');
 
 -- --------------------------------------------------------
 
@@ -258,7 +260,12 @@ INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `cost_pri
 (11, 6, 17, 2, 210.00, 273.00, 546.00, '2026-09-17 00:46:12', '2026-09-17 00:46:12'),
 (12, 7, 28, 1, 700.00, 910.00, 910.00, '2026-09-17 02:12:44', '2026-09-17 02:12:44'),
 (13, 7, 10, 1, 400.00, 520.00, 520.00, '2026-09-17 02:12:44', '2026-09-17 02:12:44'),
-(14, 7, 19, 1, 300.00, 390.00, 390.00, '2026-09-17 02:12:44', '2026-09-17 02:12:44');
+(14, 7, 19, 1, 300.00, 390.00, 390.00, '2026-09-17 02:12:44', '2026-09-17 02:12:44'),
+(15, 8, 9, 1, 650.00, 845.00, 845.00, '2026-09-18 20:49:42', '2026-09-18 20:49:42'),
+(16, 8, 10, 1, 400.00, 520.00, 520.00, '2026-09-18 20:49:42', '2026-09-18 20:49:42'),
+(17, 8, 18, 1, 550.00, 715.00, 715.00, '2026-09-18 20:49:42', '2026-09-18 20:49:42'),
+(18, 8, 31, 1, 109.08, 546.00, 546.00, '2026-09-18 20:49:42', '2026-09-18 20:49:42'),
+(19, 8, 29, 1, 450.00, 585.00, 585.00, '2026-09-18 20:49:42', '2026-09-18 20:49:42');
 
 -- --------------------------------------------------------
 
@@ -306,8 +313,8 @@ INSERT INTO `products` (`id`, `supplier_id`, `category_id`, `name`, `description
 (6, 3, 6, 'Limpiador de cristales 500 ml', 'Limpiador para cristales, ventanas y superficies de vidrio.', NULL, 195.00, 254.00, 97, 'approved', '2026-09-11 01:14:26', '2026-09-14 23:16:51'),
 (7, 5, 1, 'Resma de papel 8 ½ x 11', 'Papel blanco para impresión y uso general de oficina.', NULL, 425.00, 553.00, 77, 'approved', '2026-09-11 01:14:26', '2026-09-14 23:16:51'),
 (8, 2, 1, 'Bolígrafo azul caja x12', 'Caja de bolígrafos de tinta azul para uso de oficina.', NULL, 180.00, 234.00, 36, 'approved', '2026-09-11 01:14:26', '2026-09-14 23:16:51'),
-(9, 2, 5, 'Teclado USB', 'Teclado USB para computadoras de escritorio y oficina.', NULL, 650.00, 845.00, 18, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
-(10, 4, 5, 'Mouse óptico USB', 'Mouse óptico USB para equipos de escritorio y portátiles.', NULL, 400.00, 520.00, 60, 'approved', '2026-09-11 01:14:26', '2026-09-17 02:12:44'),
+(9, 2, 5, 'Teclado USB', 'Teclado USB para computadoras de escritorio y oficina.', NULL, 650.00, 845.00, 17, 'approved', '2026-09-11 01:14:26', '2026-09-18 20:49:42'),
+(10, 4, 5, 'Mouse óptico USB', 'Mouse óptico USB para equipos de escritorio y portátiles.', NULL, 400.00, 520.00, 59, 'approved', '2026-09-11 01:14:26', '2026-09-18 20:49:42'),
 (11, 1, 6, 'Limpiador desengrasante 1 L', 'Producto para remover grasa y suciedad de diferentes superficies.', NULL, 290.00, 377.00, 17, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
 (12, 4, 6, 'Cloro líquido 1 galón', 'Producto para limpieza y desinfección de superficies.', NULL, 300.00, 390.00, 87, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
 (13, 5, 2, 'Alcohol líquido 1 L', 'Alcohol para limpieza y desinfección de superficies.', NULL, 350.00, 455.00, 95, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
@@ -315,7 +322,7 @@ INSERT INTO `products` (`id`, `supplier_id`, `category_id`, `name`, `description
 (15, 3, 6, 'Esponja para limpieza paquete x3', 'Paquete de esponjas para limpieza general.', NULL, 120.00, 156.00, 24, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
 (16, 4, 1, 'Carpeta plástica tamaño carta', 'Carpeta plástica para organización y almacenamiento de documentos.', NULL, 95.00, 124.00, 68, 'approved', '2026-09-11 01:14:26', '2026-09-17 00:46:12'),
 (17, 3, 1, 'Marcadores permanentes caja x4', 'Caja de marcadores permanentes para oficina y almacén.', NULL, 210.00, 273.00, 32, 'approved', '2026-09-11 01:14:26', '2026-09-17 00:46:12'),
-(18, 5, 5, 'Memoria USB 64 GB', 'Memoria USB para almacenamiento y transferencia de archivos.', NULL, 550.00, 715.00, 100, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
+(18, 5, 5, 'Memoria USB 64 GB', 'Memoria USB para almacenamiento y transferencia de archivos.', NULL, 550.00, 715.00, 99, 'approved', '2026-09-11 01:14:26', '2026-09-18 20:49:42'),
 (19, 2, 5, 'Cable USB tipo C', 'Cable USB tipo C para carga y transferencia de datos.', NULL, 300.00, 390.00, 42, 'approved', '2026-09-11 01:14:26', '2026-09-17 02:12:44'),
 (20, 3, 1, 'Calculadora de escritorio', 'Calculadora electrónica para operaciones de oficina.', NULL, 275.00, 358.00, 100, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
 (21, 3, 6, 'Limpiador de baños 1 L', 'Limpiador especializado para baños y superficies sanitarias.', NULL, 280.00, 364.00, 66, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
@@ -326,12 +333,13 @@ INSERT INTO `products` (`id`, `supplier_id`, `category_id`, `name`, `description
 (26, 4, 1, 'Grapadora de escritorio', 'Grapadora metálica para trabajos de oficina.', NULL, 275.00, 358.00, 23, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
 (27, 1, 5, 'Almohadilla para mouse', 'Almohadilla para mejorar el desplazamiento del mouse.', NULL, 180.00, 234.00, 27, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
 (28, 5, 5, 'Audífonos con conexión USB', 'Audífonos USB para computadora y reuniones virtuales.', NULL, 700.00, 910.00, 34, 'approved', '2026-09-11 01:14:26', '2026-09-17 02:12:44'),
-(29, 1, 4, 'Café molido paquete 500 g', 'Café molido para consumo en oficinas y hogares.', NULL, 450.00, 585.00, 61, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
+(29, 1, 4, 'Café molido paquete 500 g', 'Café molido para consumo en oficinas y hogares.', NULL, 450.00, 585.00, 60, 'approved', '2026-09-11 01:14:26', '2026-09-18 20:49:42'),
 (30, 4, 4, 'Azúcar blanca paquete 2 lb', 'Azúcar blanca para consumo y preparación de bebidas.', NULL, 120.00, 156.00, 76, 'approved', '2026-09-11 01:14:26', '2026-09-12 01:04:45'),
-(31, 6, 6, 'BOWL CARE', 'Es un limpiador ácido de inodoro, urinales y superficies vítreas o porcelana.', NULL, 109.08, 546.00, 12, 'pending', '2026-09-14 17:15:03', '2026-09-14 17:15:03'),
+(31, 6, 6, 'BOWL CARE', 'Es un limpiador ácido de inodoro, urinales y superficies vítreas o porcelana.', NULL, 109.08, 546.00, 11, 'approved', '2026-09-14 17:15:03', '2026-09-18 20:49:42'),
 (32, 6, 6, 'ALGA LESS CARE', 'Es un efectivo algicida, bactericida y fungicida, efectivo donde se requiera la desinfección o el control de algas y hongos.', NULL, 201.77, 794.16, 20, 'approved', '2026-09-14 17:18:27', '2026-09-17 00:33:02'),
 (33, 6, 6, 'L. BOOSTER CARE', 'Es un reforzador alcalino para los procesos de lavado de tejidos. Está compuesto por alcalinos fuertes, secuestrantes y humectantes, que mantienen el sucio en suspensión, evitando la redeposición.', NULL, 166.20, 332.40, 28, 'pending', '2026-09-14 17:29:31', '2026-09-14 18:04:41'),
-(34, 6, 5, '4G ROUTER NAM, NAM POWER SUPPLY', 'Rúter tecnología', NULL, 5000.00, 8000.00, 10, 'pending', '2026-09-17 02:19:58', '2026-09-17 02:19:58');
+(34, 6, 5, '4G ROUTER NAM, NAM POWER SUPPLY', 'Rúter tecnología', NULL, 5000.00, 8000.00, 10, 'pending', '2026-09-17 02:19:58', '2026-09-17 02:19:58'),
+(35, 6, 6, 'URINAL DRIP C.VARIAS FRAGS.(0.5 LITROS)', 'ambientador para urinales de baños', NULL, 250.00, 500.00, 100, 'pending', '2026-09-18 21:36:02', '2026-09-18 21:36:02');
 
 -- --------------------------------------------------------
 
@@ -405,7 +413,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('jrPQxPR7ELZbCIJVWKMmnJxVRz6QCURgrJjp8g2a', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTU9VTjRmRHYyRnZCZk85SWV0aFd2SkpBajVzQVlWZDE2enhLRk1obiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7czo1OiJyb3V0ZSI7Tjt9fQ==', 1789597515);
+('WzajQkiaLkhx0GsE6yQGtzLgE2mtZVYoIlszZB9H', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiNUZ5TjJqVkVuT3dXeWZmUnpjcUozd0NTeUh1TmI3b0JCTmxYbk5MOCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7czo1OiJyb3V0ZSI7Tjt9fQ==', 1789767833);
 
 -- --------------------------------------------------------
 
@@ -451,6 +459,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) NOT NULL,
+  `last_login_at` timestamp NULL DEFAULT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -460,19 +469,19 @@ CREATE TABLE `users` (
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`id`, `role_id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Administrador', 'admin@jomby.test', '2026-09-11 01:14:25', '$2y$12$BO0zILdb27ud9wkWwMuPF.XdTx0nO41fOLRDvqTOnSBOUWICYuVsG', 'w3HSPXG7IM1p4I1uyQDYoW7Hsp3U6gGHeXPPXFaVhueCqXw04mvmJn7iz5bU', '2026-09-11 01:14:26', '2026-09-11 20:52:14'),
-(2, 2, 'Amani Wintheiser IV', 'lowe.erick@example.com', '2026-09-11 01:14:26', '$2y$12$cbgb..7942KFkNP94zPKkecKNJm5S0iz5vw63evojUxJlIu97n6TO', 'PkrXfkAgO5', '2026-09-11 01:14:26', '2026-09-11 01:14:26'),
-(3, 2, 'Gust Treutel', 'schmidt.roderick@example.net', '2026-09-11 01:14:26', '$2y$12$cbgb..7942KFkNP94zPKkecKNJm5S0iz5vw63evojUxJlIu97n6TO', 'mKTrOAuFcw', '2026-09-11 01:14:26', '2026-09-11 01:14:26'),
-(4, 2, 'Jennyfer Sipes', 'deron.nienow@example.com', '2026-09-11 01:14:26', '$2y$12$cbgb..7942KFkNP94zPKkecKNJm5S0iz5vw63evojUxJlIu97n6TO', '6gur2DmJPH', '2026-09-11 01:14:26', '2026-09-11 01:14:26'),
-(5, 2, 'Annabell Gislason', 'ubalistreri@example.net', '2026-09-11 01:14:26', '$2y$12$cbgb..7942KFkNP94zPKkecKNJm5S0iz5vw63evojUxJlIu97n6TO', 'fCevJ4OyIG', '2026-09-11 01:14:26', '2026-09-11 01:14:26'),
-(6, 2, 'Olaf Johns', 'rogahn.trever@example.org', '2026-09-11 01:14:26', '$2y$12$cbgb..7942KFkNP94zPKkecKNJm5S0iz5vw63evojUxJlIu97n6TO', 'rlfleIFNnX', '2026-09-11 01:14:26', '2026-09-11 01:14:26'),
-(8, 3, 'Narda Desiree', 'desireeguante@gmail.com', NULL, '$2y$12$Fpl0qn4HbBiN6Yol.CO7sepObMdtX6/Gbq9oVe7AOCyZAKyzzhOI.', NULL, '2026-09-11 19:37:25', '2026-09-11 19:37:25'),
-(9, 2, 'Jose evangelista', 'jevangelista.caredom@gmail.com', NULL, '$2y$12$W5/VjQrl8zBleArT0bOFeOHZkjbWV5s8GVbSKDme55pdNNlDS/78i', NULL, '2026-09-11 19:47:28', '2026-09-11 19:47:28'),
-(10, 3, 'Lara E guaras', 'laramarit@gmail.com', NULL, '$2y$12$nDhQFQyvD5lYzoa07oVL4eaFkE0BW.s.XKSISqv.KgpJBMPJ9QS42', NULL, '2026-09-11 19:50:54', '2026-09-11 19:50:54'),
-(11, 2, 'Miguel Reinoso', 'miguelreinoso@gmail.com', NULL, '$2y$12$YOi45qEJ.iGdlTxEDj9coeBguXAFM/idRVICzFwv0H3Wo55RNRIVi', NULL, '2026-09-11 19:54:41', '2026-09-11 19:54:41'),
-(12, 2, 'Jose Ramón', 'ramonr@gamil.com', NULL, '$2y$12$AOqSj8BJef3lP.rCkJRZKOi9uGmDe8e3FaPt664kgJhK.ubWxAcVG', NULL, '2026-09-12 00:13:06', '2026-09-12 00:13:06'),
-(13, 3, 'Jose Plata', 'jevangelistadeplata@gmail.com', NULL, '$2y$12$zhkOrseKV5HReIy48rbDluflRGDo2l6I4n42YEkg.HG1/WrEQxcma', NULL, '2026-09-17 02:08:45', '2026-09-17 02:08:45');
+INSERT INTO `users` (`id`, `role_id`, `name`, `email`, `email_verified_at`, `password`, `last_login_at`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Administrador', 'admin@jomby.test', '2026-09-11 01:14:25', '$2y$12$BO0zILdb27ud9wkWwMuPF.XdTx0nO41fOLRDvqTOnSBOUWICYuVsG', '2026-09-18 21:37:10', 'jBdkvnYDnGJzcgf7E92QLROKcmS4fJA7YnSBMmboDjigWoG5AHliDVI1gtCJ', '2026-09-11 01:14:26', '2026-09-18 21:37:10'),
+(2, 2, 'Amani Wintheiser IV', 'lowe.erick@example.com', '2026-09-11 01:14:26', '$2y$12$cbgb..7942KFkNP94zPKkecKNJm5S0iz5vw63evojUxJlIu97n6TO', NULL, 'PkrXfkAgO5', '2026-09-11 01:14:26', '2026-09-11 01:14:26'),
+(3, 2, 'Gust Treutel', 'schmidt.roderick@example.net', '2026-09-11 01:14:26', '$2y$12$cbgb..7942KFkNP94zPKkecKNJm5S0iz5vw63evojUxJlIu97n6TO', NULL, 'mKTrOAuFcw', '2026-09-11 01:14:26', '2026-09-11 01:14:26'),
+(4, 2, 'Jennyfer Sipes', 'deron.nienow@example.com', '2026-09-11 01:14:26', '$2y$12$cbgb..7942KFkNP94zPKkecKNJm5S0iz5vw63evojUxJlIu97n6TO', NULL, '6gur2DmJPH', '2026-09-11 01:14:26', '2026-09-11 01:14:26'),
+(5, 2, 'Annabell Gislason', 'ubalistreri@example.net', '2026-09-11 01:14:26', '$2y$12$cbgb..7942KFkNP94zPKkecKNJm5S0iz5vw63evojUxJlIu97n6TO', NULL, 'fCevJ4OyIG', '2026-09-11 01:14:26', '2026-09-11 01:14:26'),
+(6, 2, 'Olaf Johns', 'rogahn.trever@example.org', '2026-09-11 01:14:26', '$2y$12$cbgb..7942KFkNP94zPKkecKNJm5S0iz5vw63evojUxJlIu97n6TO', NULL, 'rlfleIFNnX', '2026-09-11 01:14:26', '2026-09-11 01:14:26'),
+(8, 3, 'Narda Desiree', 'desireeguante@gmail.com', NULL, '$2y$12$Fpl0qn4HbBiN6Yol.CO7sepObMdtX6/Gbq9oVe7AOCyZAKyzzhOI.', NULL, NULL, '2026-09-11 19:37:25', '2026-09-11 19:37:25'),
+(9, 2, 'Jose evangelista', 'jevangelista.caredom@gmail.com', NULL, '$2y$12$W5/VjQrl8zBleArT0bOFeOHZkjbWV5s8GVbSKDme55pdNNlDS/78i', '2026-09-18 21:27:10', NULL, '2026-09-11 19:47:28', '2026-09-18 21:27:10'),
+(10, 3, 'Lara E guaras', 'laramarit@gmail.com', NULL, '$2y$12$nDhQFQyvD5lYzoa07oVL4eaFkE0BW.s.XKSISqv.KgpJBMPJ9QS42', '2026-09-18 21:07:53', NULL, '2026-09-11 19:50:54', '2026-09-18 21:07:53'),
+(11, 2, 'Miguel Reinoso', 'miguelreinoso@gmail.com', NULL, '$2y$12$YOi45qEJ.iGdlTxEDj9coeBguXAFM/idRVICzFwv0H3Wo55RNRIVi', NULL, NULL, '2026-09-11 19:54:41', '2026-09-11 19:54:41'),
+(12, 2, 'Jose Ramón', 'ramonr@gamil.com', NULL, '$2y$12$AOqSj8BJef3lP.rCkJRZKOi9uGmDe8e3FaPt664kgJhK.ubWxAcVG', NULL, NULL, '2026-09-12 00:13:06', '2026-09-12 00:13:06'),
+(13, 3, 'Jose Plata', 'jevangelistadeplata@gmail.com', NULL, '$2y$12$zhkOrseKV5HReIy48rbDluflRGDo2l6I4n42YEkg.HG1/WrEQxcma', NULL, NULL, '2026-09-17 02:08:45', '2026-09-17 02:08:45');
 
 --
 -- Índices para tablas volcadas
@@ -608,7 +617,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `categories`
@@ -632,25 +641,25 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT de la tabla `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT de la tabla `returns`
