@@ -14,16 +14,14 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // Obtiene los valores enviados desde el formulario de búsqueda y filtro.
         $search = $request->input('search');
         $status = $request->input('status');
         $category = $request->input('category');
         $supplier = $request->input('supplier');
 
-        // Construye la consulta de productos junto con sus relaciones.
+        // Carga las relaciones del producto y el estado del proveedor.
         $query = Product::with(['supplier.user', 'category']);
 
-        // Aplica la búsqueda por nombre del producto o empresa proveedora.
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
@@ -37,30 +35,21 @@ class ProductController extends Controller
             });
         }
 
-        // Aplica el filtro por estado.
         if ($status) {
             $query->where('status', $status);
         }
 
-        // Aplica el filtro por categoría.
         if ($category) {
             $query->where('category_id', $category);
         }
 
-        // Aplica el filtro por proveedor.
         if ($supplier) {
             $query->where('supplier_id', $supplier);
         }
 
-        // Obtiene los productos más recientes primero.
-        $products = $query
-            ->latest()
-            ->get();
+        $products = $query->latest()->get();
 
-        // Obtiene las categorías para mostrar el filtro.
         $categories = Category::orderBy('name')->get();
-
-        // Obtiene los proveedores para mostrar el filtro.
         $suppliers = Supplier::orderBy('business_name')->get();
 
         return view('admin.products.index', compact(
@@ -75,11 +64,30 @@ class ProductController extends Controller
     }
 
     /**
-     * Aprueba un producto pendiente.
+     * Aprueba un producto únicamente si su proveedor está aprobado.
      */
     public function approve(Product $product)
     {
-        // Cambia el estado del producto a aprobado.
+        $product->load('supplier');
+
+        if (!$product->supplier || $product->supplier->status !== 'approved') {
+            return redirect()
+                ->route('admin.products.index')
+                ->with(
+                    'error',
+                    'No se puede aprobar el producto porque su proveedor no está aprobado.'
+                );
+        }
+
+        if ($product->status !== 'pending') {
+            return redirect()
+                ->route('admin.products.index')
+                ->with(
+                    'error',
+                    'Solo se pueden aprobar productos pendientes.'
+                );
+        }
+
         $product->update([
             'status' => 'approved',
         ]);
@@ -97,7 +105,6 @@ class ProductController extends Controller
      */
     public function deactivate(Product $product)
     {
-        // Cambia el estado del producto a inactivo.
         $product->update([
             'status' => 'inactive',
         ]);
